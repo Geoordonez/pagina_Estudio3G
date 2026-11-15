@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3G · Llaveros personalizados e impresión 3D en Guatemala</title>
+<meta name="description" content="3G: llaveros personalizados impresos en 3D en Guatemala. Para negocios, eventos, mayoreo y menudeo. Solo necesitamos una foto o tu logo. Cotiza por WhatsApp.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_GT">
+<meta property="og:url" content="https://geoordonez.github.io/pagina_Estudio3G/">
+<meta property="og:title" content="3G · Llaveros personalizados en 3D">
+<meta property="og:description" content="Para tu negocio, tu evento o para regalar. Solo necesitamos una foto o tu logo. Cotiza por WhatsApp.">
+<meta property="og:image" content="https://geoordonez.github.io/pagina_Estudio3G/img/llaveros.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" id="favicon" href="img/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fondo: #111114; --sup: #1C1C21; --borde: #2C2C33; --texto: #F1EFEA; --suave: #A9A7A1;
+    --verde: #1F9E57; --azul: #2450C4; --naranja: #E0661A; --dorado: #D6A417; --rosa: #CF3F7E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+  body { font-family: "Outfit", system-ui, sans-serif; background: var(--fondo); color: var(--texto); line-height: 1.5; overflow-x: hidden; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  .cont { width: min(1140px, 100% - 40px); margin-inline: auto; }
+
+  h1, h2 { font-weight: 800; text-transform: uppercase; letter-spacing: -0.035em; line-height: 0.95; }
+  h1 { font-size: clamp(2.7rem, 7.2vw, 5.4rem); }
+  h2 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 14px; }
+  .sub { color: var(--suave); font-size: 1.15rem; max-width: 540px; }
+  .sub b { color: var(--texto); font-weight: 600; }
+  .acento { color: var(--c, var(--dorado)); --s: color-mix(in srgb, var(--c, var(--dorado)) 45%, #000);
+    text-shadow: 1px 1px 0 var(--s), 2px 2px 0 var(--s), 3px 3px 0 var(--s), 4px 4px 0 var(--s); }
+  h1 .acento { text-shadow: 1px 1px 0 var(--s), 2px 2px 0 var(--s), 3px 3px 0 var(--s), 4px 4px 0 var(--s), 5px 5px 0 var(--s), 6px 6px 0 var(--s), 7px 7px 0 var(--s), 8px 8px 0 var(--s); }
+
+  /* Fondo 3D, barra de avance y filamento */
+  #gl { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+  #avance { position: fixed; top: 0; left: 0; right: 0; height: 4px; z-index: 70; transform-origin: 0 50%; transform: scaleX(0);
+    background: linear-gradient(90deg, #F2CB4E, var(--dorado), var(--naranja)); }
+  main { position: relative; }
+  #filamento { position: absolute; top: 0; left: 0; width: 100%; height: 0; overflow: hidden; z-index: -1; pointer-events: none; }
+  #filamento svg { position: absolute; top: 0; left: 0; width: 100%; }
+  #filamento path { fill: none; stroke: var(--dorado); stroke-width: 3; stroke-linecap: round; opacity: .2; }
+
+  /* Botones */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; font: 800 1.05rem "Outfit", sans-serif; text-transform: uppercase;
+    padding: 16px 26px; border-radius: 14px; border: 3px solid #000; cursor: pointer;
+    background: var(--verde); color: #fff; box-shadow: 6px 6px 0 #000; transition: transform .12s, box-shadow .12s; }
+  .btn:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 #000; }
+  .btn:active { transform: translate(4px, 4px); box-shadow: 2px 2px 0 #000; }
+  .btn.oro { background: var(--dorado); color: var(--fondo); }
+  .btn svg { width: 22px; height: 22px; fill: currentColor; flex: none; }
+
+  /* Navegación */
+  header { position: sticky; top: 0; z-index: 50; background: rgba(17,17,20,.86); backdrop-filter: blur(10px); border-bottom: 2px solid var(--borde); }
+  nav { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.05rem; text-transform: uppercase; }
+  .logo img { width: 50px; height: 50px; opacity: 0; transition: opacity .3s; }
+  .logo img.oro { opacity: 1; }
+  .logo span { color: var(--dorado); }
+  .menu { display: flex; align-items: center; gap: 28px; font-weight: 600; }
+  .menu a:not(.btn):hover { color: var(--dorado); }
+  .menu .btn { padding: 10px 18px; font-size: .9rem; box-shadow: 4px 4px 0 #000; }
+
+  /* Portada con cotización */
+  .hero { padding: 48px 0 70px; }
+  .hero .cont { display: grid; grid-template-columns: 1fr 430px; grid-template-areas: "texto form" "caja form"; gap: 10px 56px; align-items: start; }
+  .hero .texto { grid-area: texto; }
+  .hero form { grid-area: form; }
+  .caja3d { grid-area: caja; position: relative; }
+  .chapa { display: inline-block; background: var(--dorado); color: var(--fondo); font-weight: 800; text-transform: uppercase; font-size: .9rem;
+    padding: 7px 16px; border-radius: 999px; border: 3px solid #000; box-shadow: 4px 4px 0 #000; transform: rotate(-3deg); margin-bottom: 22px; }
+  .hero h1 { perspective: 700px; }
+  .hero h1 span { display: block; transform-origin: 0 100%; animation: caer .8s cubic-bezier(.2,1.5,.4,1) both; }
+  .hero h1 span:nth-child(2) { animation-delay: .14s; }
+  .hero h1 span:nth-child(3) { animation-delay: .28s; }
+  @keyframes caer { from { opacity: 0; transform: translateY(-80px) rotateX(75deg); } }
+  .hero .sub { margin-top: 22px; animation: subir .7s .5s both; }
+  @keyframes subir { from { opacity: 0; transform: translateY(24px); } }
+
+  .ancla3d { position: relative; cursor: pointer; outline: none; }
+  .ancla3d::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(circle at 50% 55%, rgba(214,164,23,.20), transparent 62%); }
+  #a1 { height: 330px; max-width: 460px; }
+  .respaldo { border: 8px solid var(--texto); box-shadow: 10px 10px 0 #000; height: 100%; overflow: hidden; }
+  .respaldo img { width: 100%; height: 100%; object-fit: cover; }
+  .con3d .respaldo { display: none; }
+  .estado { width: max-content; max-width: 100%; padding: 8px 16px; border-radius: 999px; background: var(--sup);
+    border: 2px solid var(--borde); font-weight: 600; font-size: .92rem; color: var(--suave); display: none; margin-left: 70px; }
+  .con3d .estado { display: block; }
+  .estado b { color: var(--texto); }
+
+  form { background: var(--sup); border: 3px solid var(--borde); border-radius: 22px; padding: 28px; box-shadow: 12px 12px 0 var(--dorado);
+    display: grid; gap: 14px; animation: subir .7s .35s both; }
+  form h2 { font-size: 1.9rem; margin: 0; }
+  form > p { color: var(--suave); margin-top: -6px; }
+  label { font-weight: 600; font-size: .95rem; display: grid; gap: 6px; }
+  input, select, textarea { font: 400 1rem "Outfit", sans-serif; color: var(--texto); background: var(--fondo); border: 2px solid var(--borde); border-radius: 12px; padding: 12px 14px; width: 100%; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--dorado); }
+  textarea { resize: vertical; min-height: 80px; }
+  .dos { display: grid; grid-template-columns: 1.5fr 1fr; gap: 14px; }
+  .pista { font-size: .9rem; color: var(--suave); text-align: center; }
+
+  /* Cinta */
+  .cinta { background: var(--dorado); color: var(--fondo); border-block: 3px solid #000; transform: rotate(-1.2deg); margin: 0 -10px; overflow: hidden; padding: 12px 0; }
+  .cinta div { display: flex; gap: 40px; width: max-content; font-weight: 800; font-size: 1.15rem; text-transform: uppercase; white-space: nowrap; animation: correr 30s linear infinite; }
+  .cinta span::after { content: "✦"; margin-left: 40px; }
+  @keyframes correr { to { transform: translateX(-50%); } }
+
+  /* Bloques que fluyen */
+  .flujo { padding: 90px 0 30px; }
+  .fila { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-bottom: 90px; }
+  .fila p.sub + p.sub { margin-top: 14px; }
+  .collage { position: relative; height: 430px; }
+  .collage figure { position: absolute; border: 8px solid var(--texto); box-shadow: 12px 12px 0 #000; overflow: hidden; width: 58%; }
+  .collage figure img { width: 100%; height: 100%; object-fit: cover; }
+  .collage figure:nth-child(1) { left: 0; top: 0; height: 78%; --rot: -5deg; }
+  .collage figure:nth-child(2) { right: 0; bottom: 0; height: 70%; --rot: 4deg; }
+  .collage .chapa { position: absolute; left: 34%; top: 44%; z-index: 2; margin: 0; font-size: 1rem; }
+  #a2 { height: 420px; }
+  .colores { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 26px; }
+  .colores button { width: 52px; height: 52px; border-radius: 50%; border: 3px solid #000; background: var(--k); cursor: pointer;
+    box-shadow: 4px 4px 0 #000; transition: transform .15s cubic-bezier(.2,1.6,.4,1); }
+  .colores button:hover { transform: scale(1.15) translateY(-3px); }
+  .colores button.activo { outline: 3px solid var(--texto); outline-offset: 3px; }
+
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 40px; }
+  .tarjeta { background: var(--sup); border: 3px solid var(--borde); border-radius: 22px; padding: 28px 24px; box-shadow: 10px 10px 0 var(--c); }
+  .tarjeta:hover { box-shadow: 16px 16px 0 var(--c); }
+  .tarjeta h3 { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: -0.02em; margin-bottom: 8px; transform: translateZ(30px); }
+  .tarjeta p { color: var(--suave); transform: translateZ(14px); }
+  .icono { width: 58px; height: 58px; border-radius: 16px; background: var(--c); display: grid; place-items: center; margin-bottom: 18px; border: 3px solid #000; transform: translateZ(46px); }
+  .icono svg { width: 30px; height: 30px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Precios */
+  .sec-precios { padding: 10px 0 90px; }
+  .calc-fila { display: grid; grid-template-columns: 400px 1fr; gap: 44px; align-items: center; margin-top: 36px; }
+  .calc { background: var(--sup); border: 3px solid var(--borde); border-radius: 22px; padding: 26px; box-shadow: 12px 12px 0 var(--dorado); display: grid; gap: 20px; }
+  .campo > span { display: block; font-weight: 600; margin-bottom: 10px; }
+  .ncol { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .ncol button { font: 800 1.3rem "Outfit", sans-serif; color: var(--texto); background: var(--fondo); border: 2px solid var(--borde); border-radius: 14px; padding: 10px 0 8px; cursor: pointer; transition: transform .15s cubic-bezier(.2,1.6,.4,1); }
+  .ncol button:hover { transform: translateY(-3px); }
+  .ncol button.activo { background: var(--dorado); color: var(--fondo); border-color: #000; box-shadow: 4px 4px 0 #000; }
+  .ncol i { display: flex; justify-content: center; gap: 3px; margin-top: 4px; }
+  .ncol i b { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid #000; }
+  .cant { display: grid; grid-template-columns: 1fr 92px; gap: 14px; align-items: center; }
+  .cant input[type=range] { padding: 0; border: 0; background: none; accent-color: var(--dorado); height: 28px; }
+  .cant input[type=number] { font-weight: 800; font-size: 1.15rem; text-align: center; }
+  .resultado { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: var(--fondo); border: 2px solid var(--borde); border-radius: 16px; padding: 16px; text-align: center; }
+  .resultado small { display: block; color: var(--suave); font-size: .9rem; }
+  .resultado strong { font-size: 2.5rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; display: inline-block; }
+  .resultado div:first-child strong { color: var(--dorado); }
+  .resultado strong.pum { animation: pum .3s cubic-bezier(.2,1.8,.4,1); }
+  @keyframes pum { from { transform: scale(1.3); } }
+  .tabla { width: 100%; border-collapse: separate; border-spacing: 6px; text-align: center; }
+  .tabla caption { caption-side: bottom; color: var(--suave); font-size: .95rem; padding-top: 12px; }
+  .tabla th { font-weight: 600; color: var(--suave); font-size: .92rem; padding: 6px 4px; line-height: 1.2; }
+  .tabla th b { display: block; color: var(--texto); font-size: 1.1rem; font-weight: 800; }
+  .tabla tbody th { text-align: left; color: var(--texto); font-size: 1rem; white-space: nowrap; }
+  .tabla td { background: var(--sup); border: 2px solid var(--borde); border-radius: 12px; padding: 13px 4px; font-weight: 800; font-size: 1.25rem; transition: transform .2s cubic-bezier(.2,1.6,.4,1), background .2s; }
+  .tabla td.col, .tabla td.fil { border-color: color-mix(in srgb, var(--dorado) 45%, var(--borde)); }
+  .tabla td.aqui { background: var(--dorado); color: var(--fondo); border-color: #000; box-shadow: 4px 4px 0 #000; transform: scale(1.1); }
+  .archivos { margin-top: 60px; background: var(--sup); border: 3px solid var(--borde); border-radius: 22px; padding: 30px; box-shadow: 12px 12px 0 var(--azul);
+    display: grid; grid-template-columns: 1.3fr 1fr; gap: 36px; align-items: center; }
+  .archivos h3 { font-size: 1.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 8px; transform: translateZ(30px); }
+  .archivos p { color: var(--suave); }
+  .tarifas { display: flex; align-items: center; gap: 18px; margin: 20px 0 14px; flex-wrap: wrap; transform: translateZ(40px); }
+  .tarifas div { display: flex; align-items: center; gap: 12px; }
+  .tarifas strong { font-size: 3.4rem; font-weight: 800; line-height: 1; letter-spacing: -0.04em; color: var(--c); text-shadow: 3px 3px 0 #000; }
+  .tarifas span { font-weight: 600; line-height: 1.2; max-width: 110px; }
+  .tarifas > i { font-style: normal; font-weight: 800; font-size: 2rem; color: var(--suave); }
+  .estim { background: var(--fondo); border: 2px solid var(--borde); border-radius: 16px; padding: 20px; display: grid; gap: 12px; }
+  .estim .dos { grid-template-columns: 1fr 1fr; }
+  .estim output { display: block; text-align: center; font-weight: 800; font-size: 2.2rem; color: var(--dorado); line-height: 1.1; }
+  .estim small { display: block; text-align: center; color: var(--suave); }
+
+  .pasos { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 14px 22px; margin: 70px 0 0; font-weight: 600; font-size: 1.1rem; }
+  .pasos span { display: flex; align-items: center; gap: 12px; }
+  .pasos b { width: 40px; height: 40px; border-radius: 50%; background: var(--dorado); color: var(--fondo); display: grid; place-items: center; font-weight: 800; border: 3px solid #000; flex: none; }
+  .pasos i { color: var(--dorado); font-style: normal; font-size: 1.4rem; }
+
+  /* Galería */
+  .trabajos { padding: 70px 0 40px; }
+  .cab { display: grid; grid-template-columns: 1fr 240px; gap: 30px; align-items: center; }
+  #a3 { height: 240px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 30px; }
+  .chips button { font: 600 1rem "Outfit", sans-serif; color: var(--texto); background: var(--sup); border: 2px solid var(--borde); border-radius: 999px; padding: 10px 18px; cursor: pointer; transition: transform .12s; }
+  .chips button:hover { transform: translateY(-2px); border-color: var(--dorado); }
+  .chips button.activo { background: var(--dorado); color: var(--fondo); border-color: #000; font-weight: 800; box-shadow: 4px 4px 0 #000; }
+  .galeria { columns: 4 220px; column-gap: 16px; }
+  .galeria figure { break-inside: avoid; margin-bottom: 16px; border-radius: 16px; overflow: hidden; border: 3px solid var(--borde); cursor: zoom-in; background: var(--sup);
+    animation: entrar .5s cubic-bezier(.2,1.3,.4,1) both; animation-delay: calc(var(--i) * 45ms); }
+  @keyframes entrar { from { opacity: 0; transform: translateY(40px) scale(.9); } }
+  .galeria img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; transition: transform .4s; }
+  .galeria figure.ancha img { aspect-ratio: 16 / 10; }
+  .galeria figure:hover { border-color: var(--dorado); }
+  .galeria figure:hover img { transform: scale(1.07); }
+  .mas { display: flex; justify-content: center; margin-top: 26px; }
+  #visor { position: fixed; inset: 0; z-index: 90; background: rgba(0,0,0,.9); display: none; place-items: center; cursor: zoom-out; padding: 20px; }
+  #visor.abierto { display: grid; }
+  #visor img { max-width: 100%; max-height: 90vh; border: 6px solid var(--texto); box-shadow: 12px 12px 0 var(--dorado); }
+
+  /* Cierre */
+  .final { padding: 60px 0 100px; }
+  .final .cont { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; }
+  .final h2 { font-size: clamp(2.4rem, 6.5vw, 4.6rem); }
+  .final .sub { margin: 18px 0 30px; }
+  #a4 { height: 380px; }
+
+  footer { border-top: 2px solid var(--borde); padding: 36px 0; color: var(--suave); }
+  footer .cont { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+  .redes { display: flex; gap: 22px; font-weight: 600; color: var(--texto); }
+  .redes a:hover { color: var(--dorado); }
+
+  .wa { position: fixed; right: 20px; bottom: 20px; z-index: 60; width: 62px; height: 62px; border-radius: 50%; background: #25D366; border: 3px solid #000; box-shadow: 5px 5px 0 #000; display: grid; place-items: center; }
+  .wa svg { width: 32px; height: 32px; fill: #fff; }
+
+  /* Aparecer en 3D al hacer scroll */
+  .ver { --ty: 0px; --rx: 0deg; --ry: 0deg; --rot: 0deg; transform-style: preserve-3d;
+    transform: perspective(900px) translateY(var(--ty)) rotateX(var(--rx)) rotateY(var(--ry)) rotate(var(--rot));
+    transition: opacity .6s, transform .75s cubic-bezier(.2,1.35,.4,1), box-shadow .15s; }
+  .ver:not(.ya) { opacity: 0; --ty: 70px; --rx: -38deg; }
+  .ver.tilt { transition: transform .09s linear, box-shadow .15s; }
+
+  @media (max-width: 900px) {
+    .menu a:not(.btn) { display: none; }
+    .hero { padding-top: 30px; }
+    .hero .cont { grid-template-columns: 1fr; grid-template-areas: "texto" "form" "caja"; gap: 28px; }
+    #a1 { height: 300px; margin-inline: auto; }
+    .estado { margin-inline: auto; }
+    .fila, .final .cont, .grid3, .calc-fila, .archivos { grid-template-columns: 1fr; gap: 30px; }
+    .sec-precios { padding-bottom: 60px; } .tabla { border-spacing: 4px; } .tabla td { font-size: 1.05rem; padding: 11px 2px; } .tabla th { font-size: .8rem; } .tabla th b { font-size: .95rem; }
+    .archivos { padding: 22px; } .tarifas strong { font-size: 2.8rem; }
+    .fila { margin-bottom: 60px; }
+    .fila.inv .ancla3d { order: 2; }
+    #a2, #a4 { height: 300px; }
+    .collage { height: 340px; }
+    .cab { grid-template-columns: 1fr; } #a3 { display: none; }
+    .pasos { flex-direction: column; align-items: flex-start; } .pasos i { display: none; }
+    .flujo { padding-top: 60px; }
+  }
+  @media (max-width: 480px) { .dos { grid-template-columns: 1fr; } .logo span { display: none; } .galeria { columns: 2; column-gap: 10px; } .galeria figure { margin-bottom: 10px; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } .ver:not(.ya) { opacity: 1; --ty: 0px; --rx: 0deg; } }
+</style>
+</head>
+<body>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div id="avance"></div>
+
+<header>
+  <nav class="cont">
+    <a href="#cotizar" class="logo"><img src="img/logo.jpg" alt="Logo 3G"><span>Impresión 3D</span></a>
+    <div class="menu">
+      <a href="#llaveros">Llaveros</a>
+      <a href="#precios">Precios</a>
+      <a href="#trabajos">Trabajos</a>
+      <a href="#cotizar" class="btn oro">Cotizar</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <div id="filamento" aria-hidden="true"><svg viewBox="0 0 100 1000" preserveAspectRatio="none"><path vector-effect="non-scaling-stroke" d="M4 0 C4 70 96 60 96 140 S4 210 4 290 S96 360 96 440 S4 510 4 590 S96 660 96 740 S4 810 4 880 S50 950 50 1000"/></svg></div>
+
+  <!-- PORTADA + COTIZACIÓN -->
+  <section class="hero" id="cotizar">
+    <div class="cont">
+      <div class="texto">
+        <span class="chapa">Llaveros 3D · Guatemala</span>
+        <h1><span>Tu llavero,</span><span class="acento">impreso</span><span>en 3D.</span></h1>
+        <p class="sub">Para tu negocio, tu evento o para regalar. <b>Solo necesitamos una foto o tu logo</b> y lo convertimos en llavero, del color que quieras.</p>
+      </div>
+
+      <form id="form">
+        <h2>Cotiza <span class="acento">ya</span></h2>
+        <p>Llena esto y se abre WhatsApp con tu mensaje listo.</p>
+        <label>Tu nombre
+          <input name="nombre" required placeholder="¿Cómo te llamas?">
+        </label>
+        <div class="dos">
+          <label>¿Qué necesitas?
+            <select name="tipo">
+              <option>Llaveros para mi negocio</option>
+              <option>Llaveros para un evento</option>
+              <option>Llaveros al por mayor</option>
+              <option>Un llavero personalizado</option>
+              <option>Otra pieza en 3D</option>
+            </select>
+          </label>
+          <label>Cantidad
+            <input name="cantidad" type="number" min="1" value="1" required>
+          </label>
+        </div>
+        <label>¿Qué tienes para empezar?
+          <select name="tengo">
+            <option>Una foto o mi logo</option>
+            <option>El archivo STL</option>
+            <option>Solo la idea</option>
+          </select>
+        </label>
+        <label>Cuéntanos más <span style="font-weight:400;color:var(--suave)">(opcional)</span>
+          <textarea name="idea" placeholder="Colores, tamaño, fecha del evento…"></textarea>
+        </label>
+        <button class="btn" type="submit">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.600 15.100L2 22l5-1.300A10 10 0 1 0 12 2Zm0 18.200a8.200 8.200 0 0 1-4.200-1.150l-.300-.180-3 .790.800-2.900-.200-.300A8.200 8.200 0 1 1 12 20.200Zm4.500-6.150c-.250-.120-1.460-.720-1.690-.800-.220-.080-.390-.120-.550.120-.160.250-.630.800-.780.970-.140.160-.290.180-.530.060-.250-.120-1.040-.380-1.980-1.220-.730-.650-1.230-1.460-1.370-1.700-.140-.250-.020-.380.110-.500.110-.110.250-.290.370-.430.120-.140.160-.250.250-.410.080-.160.040-.310-.020-.430-.060-.120-.550-1.330-.760-1.820-.200-.480-.400-.410-.550-.420h-.470c-.160 0-.430.060-.650.310-.220.250-.860.840-.860 2.050 0 1.210.880 2.380 1 2.540.120.160 1.730 2.640 4.190 3.700.590.250 1.040.400 1.400.520.590.190 1.120.160 1.550.100.470-.070 1.460-.600 1.660-1.170.200-.580.200-1.070.140-1.170-.060-.110-.220-.170-.470-.290Z"/></svg>
+          Enviar por WhatsApp
+        </button>
+        <p class="pista">Ya en el chat, adjunta tu foto, logo o archivo STL.</p>
+      </form>
+
+      <div class="caja3d">
+        <div class="ancla3d" id="a1" role="button" tabindex="0" aria-label="Llavero en 3D. Tócalo para imprimir otro color.">
+          <div class="respaldo"><img src="img/trio.jpg" alt="Llaveros personalizados impresos en 3D por 3G"></div>
+        </div>
+        <div class="estado" id="estado">Imprimiendo tu llavero…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRECIOS -->
+  <section class="sec-precios">
+    <div class="cont">
+      <div class="precios" id="precios">
+        <h2>Precios <span class="acento">claros</span></h2>
+        <p class="sub">El precio de cada llavero personalizado depende de <b>cuántos colores</b> lleva y <b>cuántos pides</b>. Calcula el tuyo:</p>
+        <div class="calc-fila">
+          <div class="calc ver">
+            <div class="campo"><span>¿Cuántos colores lleva?</span><div class="ncol" id="ncol"></div></div>
+            <div class="campo"><span>¿Cuántos llaveros?</span>
+              <div class="cant"><input type="range" id="rango" min="1" max="500" value="25" aria-label="Cantidad de llaveros"><input type="number" id="cuantos" min="1" max="500" value="25" aria-label="Cantidad de llaveros"></div>
+            </div>
+            <div class="resultado">
+              <div><small>Cada uno</small><strong id="pu">Q13</strong></div>
+              <div><small>Total</small><strong id="total">Q325</strong></div>
+            </div>
+            <a class="btn" id="pedir" href="#cotizar" target="_blank" rel="noopener">Pedir estos llaveros</a>
+          </div>
+          <table class="tabla" id="tabla">
+            <caption>Precio por unidad, en quetzales. ¿Más de 500? Escríbenos.</caption>
+            <thead><tr><th></th><th><b>1 – 14</b>unidades</th><th><b>15 – 49</b>unidades</th><th><b>50 – 100</b>unidades</th><th><b>100 – 500</b>unidades</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="archivos ver">
+          <div>
+            <h3>¿Ya tienes tu archivo? Lo imprimimos</h3>
+            <p>Mándanos tu STL y lo imprimimos en PLA o PETG. Se cobra por tiempo y por material:</p>
+            <div class="tarifas">
+              <div style="--c:var(--dorado)"><strong>Q5</strong><span>por hora de impresión</span></div>
+              <i>+</i>
+              <div style="--c:var(--verde)"><strong>Q1</strong><span>por gramo de PLA o PETG</span></div>
+            </div>
+            <p>El precio puede variar según la complejidad de la pieza.</p>
+          </div>
+          <div class="estim">
+            <div class="dos">
+              <label>Horas<input type="number" id="horas" min="0" step="0.5" value="4"></label>
+              <label>Gramos<input type="number" id="gramos" min="0" step="1" value="50"></label>
+            </div>
+            <output id="aprox">Q70</output>
+            <small>Precio aproximado de tu pieza</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cinta" aria-hidden="true">
+    <div>
+      <span>Llaveros para negocios</span><span>Eventos</span><span>Mayoreo y menudeo</span><span>Del color que quieras</span><span>Solo con una foto</span><span>¿Tienes el STL? Mándalo</span>
+      <span>Llaveros para negocios</span><span>Eventos</span><span>Mayoreo y menudeo</span><span>Del color que quieras</span><span>Solo con una foto</span><span>¿Tienes el STL? Mándalo</span>
+    </div>
+  </div>
+
+  <!-- LLAVEROS -->
+  <section class="flujo" id="llaveros">
+    <div class="cont">
+      <div class="fila">
+        <div>
+          <h2>Solo necesitamos <span class="acento">una foto</span></h2>
+          <p class="sub">Mándanos tu logo, una foto o hasta un dibujo a mano. Con eso hacemos el diseño de tu llavero.</p>
+          <p class="sub"><b>¿Ya tienes el archivo STL?</b> Mándalo y lo imprimimos tal cual.</p>
+        </div>
+        <div class="collage">
+          <figure class="ver"><img src="img/t/f27.jpg" alt="Llavero con logo impreso en 3D" loading="lazy"></figure>
+          <figure class="ver"><img src="img/t/f01.jpg" alt="Llaveros con el logo de un negocio" loading="lazy"></figure>
+          <span class="chapa">De la foto al llavero</span>
+        </div>
+      </div>
+
+      <div class="fila inv">
+        <div class="ancla3d" id="a2" role="button" tabindex="0" aria-label="Llavero en 3D"></div>
+        <div>
+          <h2>Del color <span class="acento" style="--c:var(--rosa)">que quieras</span></h2>
+          <p class="sub">Combinamos varios colores en un mismo llavero para que tu logo se vea como es. Prueba aquí: toca un color y mira el llavero.</p>
+          <div class="colores" id="colores">
+            <button style="--k:#D6A417" data-c="D6A417" aria-label="Dorado" class="activo"></button>
+            <button style="--k:#1F9E57" data-c="1F9E57" aria-label="Verde"></button>
+            <button style="--k:#2450C4" data-c="2450C4" aria-label="Azul"></button>
+            <button style="--k:#D62B2B" data-c="D62B2B" aria-label="Rojo"></button>
+            <button style="--k:#E0661A" data-c="E0661A" aria-label="Naranja"></button>
+            <button style="--k:#CF3F7E" data-c="CF3F7E" aria-label="Rosa"></button>
+            <button style="--k:#F1EFEA" data-c="F1EFEA" aria-label="Blanco"></button>
+          </div>
+        </div>
+      </div>
+
+      <h2>Uno, cien <span class="acento" style="--c:var(--verde)">o mil</span></h2>
+      <p class="sub">Hacemos llaveros para lo que necesites, en la cantidad que necesites.</p>
+      <div class="grid3">
+        <article class="tarjeta ver" style="--c:var(--rosa)">
+          <div class="icono"><svg viewBox="0 0 24 24"><rect x="3.500" y="9" width="17" height="11.500" rx="1.500"/><path d="M3.500 13h17M12 9v11.500M12 9c-1.500-4-6-4-5.500-1.500C7 9 12 9 12 9Zm0 0c1.500-4 6-4 5.500-1.500C17 9 12 9 12 9Z"/></svg></div>
+          <h3>Eventos</h3>
+          <p>Recuerdos para bodas, XV años, cumpleaños, graduaciones y eventos de empresa, con el nombre, la fecha o el diseño del evento.</p>
+        </article>
+        <article class="tarjeta ver" style="--c:var(--dorado)">
+          <div class="icono"><svg viewBox="0 0 24 24"><path d="m12 2.500 8.500 4.750v9.500L12 21.500l-8.500-4.750v-9.500L12 2.500Z"/><path d="M3.500 7.250 12 12l8.500-4.750M12 12v9.500"/></svg></div>
+          <h3>Mayoreo</h3>
+          <p>Pedidos grandes con el logo de tu negocio o tu marca, para regalar a tus clientes o para vender.</p>
+        </article>
+        <article class="tarjeta ver" style="--c:var(--azul)">
+          <div class="icono"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="4.500"/><path d="M11.200 11.200 20 20M16 16l2.500-2.500M18.500 18.500 21 16"/></svg></div>
+          <h3>Menudeo</h3>
+          <p>¿Solo quieres uno o unos pocos? También. Un llavero con tu nombre, tu mascota o lo que se te ocurra.</p>
+        </article>
+      </div>
+
+      <div class="pasos">
+        <span><b>1</b> Mándanos tu foto, logo o STL</span><i>→</i>
+        <span><b>2</b> Te pasamos el diseño y el precio</span><i>→</i>
+        <span><b>3</b> Lo imprimimos y te lo entregamos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRABAJOS -->
+  <section class="trabajos" id="trabajos">
+    <div class="cont">
+      <div class="cab">
+        <div>
+          <h2>Trabajos <span class="acento" style="--c:var(--naranja)">reales</span></h2>
+          <p class="sub">Todo esto salió de nuestras impresoras. Además de llaveros hacemos letreros, figuras y piezas a medida.</p>
+        </div>
+        <div class="ancla3d" id="a3" aria-hidden="true"></div>
+      </div>
+      <div class="chips" id="chips"></div>
+      <div class="galeria" id="galeria"></div>
+      <div class="mas"><button class="btn oro" id="mas">Ver más fotos</button></div>
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="final">
+    <div class="cont">
+      <div>
+        <h2>¿Hacemos <span class="acento">el tuyo?</span></h2>
+        <p class="sub">Escríbenos, mándanos tu foto y dinos cuántos quieres.</p>
+        <a class="btn js-wa" href="#cotizar">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.600 15.100L2 22l5-1.300A10 10 0 1 0 12 2Zm0 18.200a8.200 8.200 0 0 1-4.200-1.150l-.300-.180-3 .790.800-2.900-.200-.300A8.200 8.200 0 1 1 12 20.200Zm4.500-6.150c-.250-.120-1.460-.720-1.690-.800-.220-.080-.390-.120-.550.120-.160.250-.630.800-.780.970-.140.160-.290.180-.530.060-.250-.120-1.040-.380-1.980-1.220-.730-.650-1.230-1.460-1.370-1.700-.140-.250-.020-.380.110-.500.110-.110.250-.290.370-.430.120-.140.160-.250.250-.410.080-.160.040-.310-.020-.430-.060-.120-.550-1.330-.760-1.820-.200-.480-.400-.410-.550-.420h-.470c-.160 0-.430.060-.650.310-.220.250-.860.840-.860 2.050 0 1.210.880 2.380 1 2.540.120.160 1.730 2.640 4.190 3.700.590.250 1.040.400 1.400.520.590.190 1.120.160 1.550.100.470-.070 1.460-.600 1.660-1.170.200-.580.200-1.070.140-1.170-.060-.110-.220-.170-.470-.290Z"/></svg>
+          WhatsApp 3877-5069
+        </a>
+      </div>
+      <div class="ancla3d" id="a4" role="button" tabindex="0" aria-label="Llavero en 3D"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="cont">
+    <a href="#cotizar" class="logo"><img src="img/logo.jpg" alt="Logo 3G"><span>Impresión 3D · Guatemala</span></a>
+    <div class="redes">
+      <a class="js-wa" href="#cotizar">WhatsApp 3877-5069</a>
+      <a id="ig" href="#" target="_blank" rel="noopener">Instagram</a>
+    </div>
+    <small>© <span id="anio"></span> 3G</small>
+  </div>
+</footer>
+
+<a class="wa js-wa" href="#cotizar" aria-label="Escríbenos por WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.600 15.100L2 22l5-1.300A10 10 0 1 0 12 2Zm0 18.200a8.200 8.200 0 0 1-4.200-1.150l-.300-.180-3 .790.800-2.900-.200-.300A8.200 8.200 0 1 1 12 20.200Zm4.500-6.150c-.250-.120-1.460-.720-1.690-.800-.220-.080-.390-.120-.550.120-.160.250-.630.800-.780.970-.140.160-.290.180-.530.060-.250-.120-1.040-.380-1.980-1.220-.730-.650-1.230-1.460-1.370-1.700-.140-.250-.020-.380.110-.500.110-.110.250-.290.370-.430.120-.140.160-.250.250-.410.080-.160.040-.310-.020-.430-.060-.120-.550-1.330-.760-1.820-.200-.480-.400-.410-.550-.420h-.470c-.160 0-.430.060-.650.310-.220.250-.860.840-.860 2.050 0 1.210.880 2.380 1 2.540.120.160 1.730 2.640 4.190 3.700.590.250 1.040.400 1.400.520.590.190 1.120.160 1.550.100.470-.070 1.460-.600 1.660-1.170.200-.580.200-1.070.140-1.170-.060-.110-.220-.170-.470-.290Z"/></svg>
+</a>
+
+<div id="visor"><img alt="Foto ampliada"></div>
+
+<script>
+  // ====== DATOS DEL NEGOCIO ======
+  const WHATSAPP = "50238775069";            // código de país + número, sin espacios
+  const INSTAGRAM = "";                      // enlace completo a tu Instagram
+
+  // ====== FOTOS DE LA GALERÍA: [archivo dentro de img/, categoría] ======
+  const CATEGORIAS = { todos: "Todos", negocios: "Para negocios", eventos: "Eventos y mayoreo", regalos: "Nombres y regalos", piezas: "Piezas y figuras" };
+  const FOTOS = [
+    ["t/f01.jpg", "negocios"], ["t/f13.jpg", "eventos"], ["t/f25.jpg", "regalos"], ["t/f06.jpg", "piezas"],
+    ["t/f17.jpg", "negocios"], ["t/f15.jpg", "eventos"], ["t/f35.jpg", "regalos"], ["t/f38.jpg", "piezas"],
+    ["t/f21.jpg", "negocios"], ["t/f20.jpg", "eventos"], ["t/f09.jpg", "regalos"], ["t/f04.jpg", "piezas"],
+    ["t/f11.jpg", "negocios"], ["t/f14.jpg", "eventos"], ["t/f03.jpg", "regalos"], ["t/f10.jpg", "piezas"],
+    ["t/f08.jpg", "negocios"], ["t/f24.jpg", "eventos"], ["t/f29.jpg", "regalos"], ["t/f16.jpg", "piezas"],
+    ["t/f27.jpg", "negocios"], ["t/f19.jpg", "eventos"], ["t/f05.jpg", "regalos"], ["t/f26.jpg", "piezas"],
+    ["t/f12.jpg", "negocios"], ["t/f30.jpg", "eventos"], ["t/f23.jpg", "regalos"], ["t/f33.jpg", "piezas"],
+    ["llaveros.jpg", "negocios"], ["t/f07.jpg", "eventos"], ["t/f22.jpg", "regalos"], ["t/f34.jpg", "piezas"],
+    ["trio.jpg", "negocios"], ["t/f37.jpg", "regalos"], ["t/f18.jpg", "piezas"], ["t/f36.jpg", "regalos"],
+  ];
+  // ===============================
+
+  const wa = (msg) => "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
+  document.querySelectorAll(".js-wa").forEach((a) => {
+    a.href = wa("¡Hola 3G! Quiero cotizar unos llaveros.");
+    a.target = "_blank"; a.rel = "noopener";
+  });
+  const ig = document.getElementById("ig");
+  if (INSTAGRAM) ig.href = INSTAGRAM; else ig.remove();
+  document.getElementById("anio").textContent = new Date().getFullYear();
+
+  document.getElementById("form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const d = new FormData(e.target);
+    let msg = "¡Hola 3G! Soy " + d.get("nombre").trim() + ".\n" +
+              "Quiero cotizar: " + d.get("tipo") + "\n" +
+              "Cantidad: " + d.get("cantidad") + "\n" +
+              "Tengo: " + d.get("tengo");
+    const idea = d.get("idea").trim();
+    if (idea) msg += "\nDetalles: " + idea;
+    window.open(wa(msg), "_blank", "noopener");
+  });
+
+  // ====== PRECIOS (en quetzales) ======
+  // Llaveros: una fila por número de colores (1 a 4); columnas: 1–14, 15–49, 50–100, 100–500 unidades
+  const PRECIOS = [
+    [13, 11, 8, 6],
+    [15, 13, 9, 7],
+    [20, 15, 10, 8],
+    [22, 17, 12, 10],
+  ];
+  const Q_HORA = 5, Q_GRAMO = 1;   // imprimir archivos: por hora de impresión y por gramo de PLA/PETG
+
+  (function () {
+    const ncol = document.getElementById("ncol"), cuerpo = document.querySelector("#tabla tbody");
+    const rango = document.getElementById("rango"), cuantos = document.getElementById("cuantos");
+    const pu = document.getElementById("pu"), total = document.getElementById("total"), pedir = document.getElementById("pedir");
+    const PUNTOS = ["#D6A417", "#CF3F7E", "#2450C4", "#1F9E57"];
+    let colores = 2, cant = 25;
+    const tramo = (n) => (n <= 14 ? 0 : n <= 49 ? 1 : n < 100 ? 2 : 3);
+
+    PRECIOS.forEach((fila, f) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.setAttribute("aria-label", (f + 1) + (f ? " colores" : " color"));
+      b.innerHTML = (f + 1) + "<i>" + PUNTOS.slice(0, f + 1).map((c) => '<b style="background:' + c + '"></b>').join("") + "</i>";
+      b.addEventListener("click", () => { colores = f + 1; pintar(true); });
+      ncol.appendChild(b);
+      const tr = document.createElement("tr");
+      tr.innerHTML = "<th>" + (f + 1) + (f ? " colores" : " color") + "</th>" + fila.map((p) => "<td>Q" + p + "</td>").join("");
+      cuerpo.appendChild(tr);
+    });
+    cuerpo.querySelectorAll("td").forEach((td) => {
+      td.style.cursor = "pointer";
+      td.addEventListener("click", () => {
+        colores = td.parentElement.rowIndex; const c = td.cellIndex - 1;
+        if (tramo(cant) !== c) cant = [1, 15, 50, 100][c];
+        pintar(true);
+      });
+    });
+
+    function pintar(animar) {
+      const t = tramo(cant), precio = PRECIOS[colores - 1][t];
+      rango.value = cant; if (document.activeElement !== cuantos) cuantos.value = cant;
+      ncol.querySelectorAll("button").forEach((b, i) => b.classList.toggle("activo", i === colores - 1));
+      cuerpo.querySelectorAll("tr").forEach((tr, f) => tr.querySelectorAll("td").forEach((td, c) => {
+        td.className = f === colores - 1 && c === t ? "aqui" : f === colores - 1 ? "fil" : c === t ? "col" : "";
+      }));
+      if (pu.textContent !== "Q" + precio && animar) { pu.classList.remove("pum"); void pu.offsetWidth; pu.classList.add("pum"); }
+      pu.textContent = "Q" + precio;
+      total.textContent = "Q" + (precio * cant).toLocaleString("es-GT");
+      pedir.href = wa("¡Hola 3G! Quiero " + cant + (cant === 1 ? " llavero" : " llaveros") + " de " + colores + (colores === 1 ? " color" : " colores") +
+        ". Según la página son Q" + precio + " cada uno (total Q" + precio * cant + ").");
+    }
+    const leer = (v) => Math.max(1, Math.min(500, Math.round(Number(v) || 1)));
+    rango.addEventListener("input", () => { cant = leer(rango.value); pintar(true); });
+    cuantos.addEventListener("input", () => { cant = leer(cuantos.value); pintar(true); });
+    cuantos.addEventListener("blur", () => { cuantos.value = cant; });
+    pintar(false);
+
+    const horas = document.getElementById("horas"), gramos = document.getElementById("gramos"), aprox = document.getElementById("aprox");
+    const estimar = () => {
+      const q = Math.max(0, Number(horas.value) || 0) * Q_HORA + Math.max(0, Number(gramos.value) || 0) * Q_GRAMO;
+      aprox.textContent = "Q" + (Math.round(q * 100) / 100).toLocaleString("es-GT");
+    };
+    horas.addEventListener("input", estimar); gramos.addEventListener("input", estimar); estimar();
+  })();
+
+  // Logo en dorado (se genera a partir del logo original)
+  (function () {
+    const im = new Image();
+    im.onload = () => {
+      const N = 256, c = document.createElement("canvas"); c.width = c.height = N;
+      const x = c.getContext("2d"); x.drawImage(im, 0, 0, N, N);
+      const d = x.getImageData(0, 0, N, N), p = d.data;
+      for (let i = 0; i < p.length; i += 4) {
+        const luz = (p[i] + p[i + 1] + p[i + 2]) / 3, k = Math.floor(i / 4 / N) / N; // k: 0 arriba, 1 abajo
+        p[i] = 242 - 58 * k; p[i + 1] = 203 - 69 * k; p[i + 2] = 78 - 67 * k;
+        p[i + 3] = luz > 200 ? 0 : Math.min(255, (200 - luz) * 2.2);
+      }
+      x.putImageData(d, 0, 0);
+      const url = c.toDataURL("image/png");
+      document.querySelectorAll(".logo img").forEach((el) => { el.src = url; el.classList.add("oro"); });
+      document.getElementById("favicon").href = url;
+    };
+    im.src = "img/logo.jpg";
+  })();
+
+  // Galería por categorías
+  (function () {
+    const chips = document.getElementById("chips"), gal = document.getElementById("galeria"), mas = document.getElementById("mas"), visor = document.getElementById("visor");
+    const INICIAL = 12; let cat = "todos", todo = false;
+    function pintar() {
+      const lista = FOTOS.filter((f) => cat === "todos" || f[1] === cat);
+      const ver = todo ? lista : lista.slice(0, INICIAL);
+      gal.innerHTML = "";
+      ver.forEach((f, i) => {
+        const fig = document.createElement("figure"), im = document.createElement("img");
+        fig.style.setProperty("--i", i % INICIAL);
+        im.loading = "lazy"; im.alt = "Trabajo de 3G: " + CATEGORIAS[f[1]].toLowerCase(); im.src = "img/" + f[0];
+        im.addEventListener("load", () => { if (im.naturalWidth > im.naturalHeight) fig.classList.add("ancha"); });
+        fig.addEventListener("click", () => { visor.firstElementChild.src = im.src; visor.classList.add("abierto"); });
+        fig.appendChild(im); gal.appendChild(fig);
+      });
+      mas.parentElement.style.display = lista.length > ver.length ? "" : "none";
+    }
+    Object.keys(CATEGORIAS).forEach((k) => {
+      const b = document.createElement("button");
+      b.textContent = CATEGORIAS[k]; if (k === cat) b.className = "activo";
+      b.addEventListener("click", () => { cat = k; todo = false; chips.querySelectorAll("button").forEach((x) => x.classList.toggle("activo", x === b)); pintar(); });
+      chips.appendChild(b);
+    });
+    mas.addEventListener("click", () => { todo = true; pintar(); });
+    visor.addEventListener("click", () => visor.classList.remove("abierto"));
+    addEventListener("keydown", (e) => { if (e.key === "Escape") visor.classList.remove("abierto"); });
+    pintar();
+  })();
+
+  // Aparecer al hacer scroll
+  const obs = new IntersectionObserver((entradas) => {
+    entradas.forEach((en, i) => {
+      if (!en.isIntersecting) return;
+      const el = en.target;
+      el.style.transitionDelay = (i * 110) + "ms";
+      el.classList.add("ya");
+      setTimeout(() => { el.style.transitionDelay = ""; }, 1100 + i * 110);
+      obs.unobserve(el);
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll(".ver").forEach((el) => obs.observe(el));
+
+  // Barra de avance y filamento que se va "imprimiendo" al bajar
+  const avance = document.getElementById("avance"), filamento = document.getElementById("filamento"), principal = document.querySelector("main");
+  const alScroll = () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    avance.style.transform = "scaleX(" + (max > 0 ? scrollY / max : 0) + ")";
+    const alto = principal.offsetHeight;
+    filamento.firstElementChild.style.height = alto + "px";
+    filamento.style.height = Math.max(0, Math.min(alto, scrollY + innerHeight * 0.6 - principal.offsetTop)) + "px";
+  };
+  addEventListener("scroll", alScroll, { passive: true }); addEventListener("resize", alScroll);
+  new ResizeObserver(alScroll).observe(principal);
+
+  // Tarjetas y fotos que se inclinan en 3D con el cursor
+  if (matchMedia("(hover: hover)").matches) {
+    document.querySelectorAll(".tarjeta, .collage figure, .archivos").forEach((el) => {
+      el.addEventListener("pointermove", (e) => {
+        if (!el.classList.contains("ya")) return;
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+        el.classList.add("tilt");
+        el.style.setProperty("--ry", (px * 20) + "deg");
+        el.style.setProperty("--rx", (-py * 20) + "deg");
+      });
+      el.addEventListener("pointerleave", () => {
+        el.classList.remove("tilt");
+        el.style.setProperty("--ry", "0deg"); el.style.setProperty("--rx", "0deg");
+      });
+    });
+  }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ====== Escena 3D: el llavero se imprime en la portada y te acompaña por la página ======
+(function () {
+  if (!window.THREE) return;
+  const canvas = document.getElementById("gl");
+  const anclas = [...document.querySelectorAll(".ancla3d")];
+  const estado = document.getElementById("estado");
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true }); } catch (e) { return; }
+  document.body.classList.add("con3d");
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  renderer.localClippingEnabled = true;
+
+  const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const COLORES = [0xD6A417, 0x1F9E57, 0x2450C4, 0xD62B2B, 0xE0661A, 0xCF3F7E, 0xF1EFEA];
+  const FOV = 35, D = 10, TAN = Math.tan(FOV * Math.PI / 360);
+  const scene = new THREE.Scene();
+  const cam = new THREE.PerspectiveCamera(FOV, 1, 0.1, 100);
+  cam.position.z = D;
+  let W = 1, H = 1;
+  function medir() {
+    W = innerWidth; H = innerHeight;
+    renderer.setSize(W, H, false);
+    cam.aspect = W / H; cam.updateProjectionMatrix();
+  }
+  addEventListener("resize", medir); medir();
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.42));
+  const sol = new THREE.DirectionalLight(0xffffff, 0.8); sol.position.set(3, 5, 7); scene.add(sol);
+  const l1 = new THREE.PointLight(0xffe08a, 0.7, 40); l1.position.set(-6, -3, 5); scene.add(l1);
+  const l2 = new THREE.PointLight(0xff7ab8, 0.5, 40); l2.position.set(6, 4, 3); scene.add(l2);
+
+  // Textura de capas, como las líneas de una pieza impresa
+  const lienzo = document.createElement("canvas"); lienzo.width = 4; lienzo.height = 8;
+  const lx = lienzo.getContext("2d"); lx.fillStyle = "#fff"; lx.fillRect(0, 0, 4, 8); lx.fillStyle = "#cfcfcf"; lx.fillRect(0, 0, 4, 2);
+  const capas = new THREE.CanvasTexture(lienzo); capas.wrapS = capas.wrapT = THREE.RepeatWrapping; capas.repeat.set(1, 30);
+
+  // ---------- Llavero ----------
+  const plano = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0);
+  const matBase = new THREE.MeshStandardMaterial({ color: COLORES[0], map: capas, roughness: 0.5, metalness: 0.05, clippingPlanes: [plano], side: THREE.DoubleSide });
+  const matCara = new THREE.MeshStandardMaterial({ color: 0xF1EFEA, roughness: 0.55, clippingPlanes: [plano] });
+  const matMetal = new THREE.MeshStandardMaterial({ color: 0xd8d8de, roughness: 0.3, metalness: 0.55 });
+  const matGris = new THREE.MeshStandardMaterial({ color: 0x3a3a44, roughness: 0.6 });
+  const matOro = new THREE.MeshStandardMaterial({ color: 0xD6A417, roughness: 0.35, metalness: 0.5 });
+
+  const llavero = new THREE.Group(); scene.add(llavero);
+  const giro = new THREE.Group(); llavero.add(giro);
+  const OFF = -0.55; giro.position.y = OFF;
+  const pieza = (geo, mat, x, y, z, padre) => { const m = new THREE.Mesh(geo, mat); m.position.set(x || 0, y || 0, z || 0); (padre || giro).add(m); return m; };
+
+  const disco = new THREE.CylinderGeometry(1, 1, 0.2, 72); disco.rotateX(Math.PI / 2);
+  pieza(disco, matBase);
+  pieza(new THREE.TorusGeometry(0.17, 0.075, 14, 32), matBase, 0, 1.12, 0);
+  [-0.34, 0.34].forEach((x) => {
+    [1, -1].forEach((s) => { pieza(new THREE.BoxGeometry(0.46, 0.12, 0.1), matCara, x, 0.3, 0.12).rotation.z = s * Math.PI / 4; });
+  });
+  const ARCO = Math.PI * 0.85;
+  const sonrisa = pieza(new THREE.TorusGeometry(0.6, 0.07, 12, 48, ARCO), matCara, 0, 0.14, 0.11);
+  sonrisa.rotation.z = -Math.PI / 2 - ARCO / 2; sonrisa.scale.z = 0.7;
+
+  const metal = new THREE.Group(); giro.add(metal); metal.position.y = 1.12; metal.scale.setScalar(0.001);
+  pieza(new THREE.TorusGeometry(0.3, 0.036, 12, 48), matMetal, 0, 0.3, 0, metal).rotation.y = Math.PI / 2.3;
+  pieza(new THREE.TorusGeometry(0.46, 0.04, 12, 64), matMetal, 0, 0.98, 0, metal);
+
+  // Cama y boquilla de la impresora
+  const cama = pieza(new THREE.CylinderGeometry(1.45, 1.45, 0.08, 64), matGris, 0, OFF - 1.07, 0, llavero);
+  const boquilla = new THREE.Group(); llavero.add(boquilla);
+  pieza(new THREE.ConeGeometry(0.13, 0.3, 20), matOro, 0, 0.15, 0, boquilla).rotation.x = Math.PI;
+  pieza(new THREE.BoxGeometry(0.42, 0.3, 0.42), matGris, 0, 0.45, 0, boquilla);
+  pieza(new THREE.CylinderGeometry(0.07, 0.07, 1.6, 12), matGris, 0, 1.4, 0, boquilla);
+
+  const Y_MIN = OFF - 1.04, Y_MAX = OFF + 1.4, DURACION = 4.5;
+  let avanceImp = quieto ? 1 : 0, listo = quieto, iColor = 0, tListo = 0;
+  const colorMeta = new THREE.Color(COLORES[0]), caraMeta = new THREE.Color(0xF1EFEA);
+  const botones = [...document.querySelectorAll("#colores button")];
+
+  function ponerColor(hex) {
+    colorMeta.setHex(hex);
+    const claro = colorMeta.r * 0.3 + colorMeta.g * 0.59 + colorMeta.b * 0.11 > 0.75;
+    caraMeta.setHex(claro ? 0x1b1b20 : 0xF1EFEA);
+    botones.forEach((b) => b.classList.toggle("activo", parseInt(b.dataset.c, 16) === hex));
+  }
+  function reimprimir() {
+    if (!listo) return;
+    iColor = (COLORES.indexOf(colorMeta.getHex()) + 1) % COLORES.length;
+    ponerColor(COLORES[iColor]); matBase.color.copy(colorMeta); matCara.color.copy(caraMeta);
+    avanceImp = 0; listo = false; tListo = 0;
+  }
+  const a1 = document.getElementById("a1");
+  a1.addEventListener("click", reimprimir);
+  a1.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); reimprimir(); } });
+  botones.forEach((b) => b.addEventListener("click", () => { ponerColor(parseInt(b.dataset.c, 16)); salto = 1; }));
+
+  // ---------- Figuras flotando por toda la página ----------
+  const figuras = [];
+  const geos = [
+    new THREE.TorusGeometry(0.5, 0.18, 12, 28), new THREE.IcosahedronGeometry(0.6, 0), new THREE.BoxGeometry(0.8, 0.8, 0.8),
+    new THREE.TorusKnotGeometry(0.4, 0.13, 70, 10), new THREE.OctahedronGeometry(0.6, 0), new THREE.ConeGeometry(0.5, 0.9, 5),
+  ];
+  const TONOS = [0xD6A417, 0xCF3F7E, 0x1F9E57, 0xF2CB4E, 0x2450C4, 0xE0661A];
+  const DATOS = [ // x (fracción del ancho), posición en la página (0 a 1), profundidad, parallax
+    [0.47, 0.02, -3, 0.7], [-0.48, 0.17, -3, 1.2], [0.48, 0.27, -1, 1.1], [-0.47, 0.37, -4, 0.75], [0.46, 0.47, -3, 1.25],
+    [-0.48, 0.57, -1, 0.9], [0.47, 0.67, -4, 0.7], [-0.47, 0.77, -2, 1.15], [0.47, 0.87, -1, 0.85], [-0.46, 0.96, -3, 1.1],
+  ];
+  DATOS.forEach((d, i) => {
+    const malla = i % 2 === 1;
+    const m = new THREE.Mesh(geos[i % geos.length], new THREE.MeshStandardMaterial({
+      color: TONOS[i % TONOS.length], roughness: 0.45, flatShading: true, wireframe: malla, transparent: true, opacity: malla ? 0.9 : 0.8 }));
+    m.userData = { x: d[0], pag: d[1], z: d[2], par: d[3], vx: 0.2 + (i % 3) * 0.12, vy: 0.3 + (i % 4) * 0.1, fase: i * 1.7 };
+    scene.add(m); figuras.push(m);
+  });
+
+  // ---------- Cursor ----------
+  let mx = 0, my = 0, sx = 0, sy = 0;
+  addEventListener("pointermove", (e) => { mx = e.clientX / innerWidth - 0.5; my = e.clientY / innerHeight - 0.5; }, { passive: true });
+
+  // Posición del llavero en pantalla (pixeles): va volando de un recuadro a otro
+  const pos = { x: 0, y: 0, t: 0, ok: false };
+  let vuelta = 0, salto = 0, anclaAct = null;
+  const reloj = new THREE.Clock();
+
+  function cuadro() {
+    requestAnimationFrame(cuadro);
+    const dt = Math.min(reloj.getDelta(), 0.05), t = reloj.elapsedTime;
+    const upp = 2 * D * TAN / H; // unidades 3D por pixel en el plano z = 0
+    sx += (mx - sx) * 0.07; sy += (my - sy) * 0.07;
+
+    // Recuadro destino: mientras imprime, el de la portada; después, el más cercano al centro de la pantalla
+    let dest = null, mejor = 1e9, elegido = null;
+    (listo ? anclas : [a1]).forEach((a) => {
+      const r = a.getBoundingClientRect();
+      if (!r.width) return;
+      const d = Math.abs(r.top + r.height / 2 - H / 2);
+      if (d < mejor) { mejor = d; dest = r; elegido = a; }
+    });
+    if (dest) {
+      const cx = dest.left + dest.width / 2, cy = dest.top + dest.height / 2, tam = Math.min(dest.width, dest.height);
+      if (elegido !== anclaAct) { if (anclaAct) vuelta += Math.PI * 2; anclaAct = elegido; }
+      if (!pos.ok || !listo || quieto) { pos.x = cx; pos.y = cy; pos.t = tam; pos.ok = true; }
+      else { pos.x += (cx - pos.x) * 0.1; pos.y += (cy - pos.y) * 0.22; pos.t += (tam - pos.t) * 0.1; }
+    }
+    const s = pos.t * upp / 4.3;
+    llavero.position.set((pos.x - W / 2) * upp, -(pos.y - H / 2) * upp, 0);
+    llavero.scale.setScalar(Math.max(0.0001, s * (1 + salto * 0.18)));
+    salto *= 0.9;
+    matBase.color.lerp(colorMeta, 0.12); matCara.color.lerp(caraMeta, 0.12);
+
+    if (!listo) {
+      avanceImp = Math.min(1, avanceImp + dt / DURACION);
+      if (avanceImp >= 1) listo = true;
+      estado.innerHTML = listo ? "<b>¡Listo!</b> Tócalo para imprimir otro color" : "Imprimiendo tu llavero… <b>" + Math.round(avanceImp * 100) + "%</b>";
+    }
+    const yLocal = Y_MIN + (Y_MAX - Y_MIN) * avanceImp;
+    plano.constant = llavero.position.y + yLocal * s + (listo ? 1000 : 0);
+
+    if (listo) {
+      tListo += dt;
+      const k = Math.min(1, tListo / 0.5), rebote = 1 + Math.sin(k * Math.PI) * 0.25;
+      metal.scale.setScalar(Math.max(0.001, k * rebote));
+      const fuera = Math.max(0.001, 1 - tListo / 0.35);
+      cama.scale.setScalar(fuera); boquilla.scale.setScalar(fuera);
+      const yObj = vuelta + sx * 1.1 + (quieto ? 0 : Math.sin(t * 0.7) * 0.4);
+      giro.rotation.y += (yObj - giro.rotation.y) * 0.06;
+      giro.rotation.x += (sy * 0.6 - giro.rotation.x) * 0.08;
+      giro.rotation.z = quieto ? 0 : Math.sin(t * 1.1) * 0.06;
+      giro.position.y = OFF + (quieto ? 0 : Math.sin(t * 1.4) * 0.08);
+    } else {
+      vuelta = 0;
+      metal.scale.setScalar(0.001);
+      cama.scale.setScalar(1); boquilla.scale.setScalar(1);
+      giro.rotation.set(0, Math.sin(t * 0.8) * 0.3, 0); giro.position.y = OFF;
+      const yy = yLocal - OFF, medio = Math.abs(yy) < 1 ? Math.sqrt(1 - yy * yy) : 0.2;
+      boquilla.position.set(Math.sin(t * 11) * medio, yLocal, 0);
+    }
+
+    // Figuras con parallax
+    const altoDoc = document.documentElement.scrollHeight, chico = W < 700 ? 0.55 : 1;
+    figuras.forEach((m) => {
+      const u = m.userData, uz = 2 * (D - u.z) * TAN / H;
+      const yPx = (u.pag * altoDoc - scrollY - H / 2) * u.par;
+      m.position.set(u.x * W * uz, -yPx * uz + (quieto ? 0 : Math.sin(t * 0.6 + u.fase) * 0.25), u.z);
+      m.rotation.x = u.fase + (quieto ? 0 : t * u.vx) + scrollY * 0.002;
+      m.rotation.y = u.fase + (quieto ? 0 : t * u.vy) + scrollY * 0.003;
+      m.scale.setScalar(chico);
+    });
+
+    renderer.render(scene, cam);
+  }
+  cuadro();
+})();
+</script>
+</body>
+</html>
