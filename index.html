@@ -3,6 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111114">
+<script>
+  // Modo ligero: dentro de Instagram, Facebook o TikTok no se carga la escena 3D ni los efectos pesados
+  (function () {
+    var ua = navigator.userAgent || "", d = document.documentElement;
+    var lite = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|TikTok|musical_ly|BytedanceWebview|Snapchat|MicroMessenger|Pinterest|Line\//i.test(ua) || /[?&]lite=1/.test(location.search);
+    window.LITE = lite;
+    d.classList.add("js");
+    if (lite) d.classList.add("lite");
+    // Red de seguridad: si por algo falla el resto del código, el contenido se muestra igual
+    setTimeout(function () { if (!window.__listo) d.classList.add("revelar"); }, 3500);
+  })();
+</script>
 <title>3G · Llaveros personalizados e impresión 3D en Guatemala</title>
 <meta name="description" content="3G: llaveros personalizados y piezas impresas en 3D en Guatemala. Para negocios, eventos, mayoreo y menudeo. Solo necesitamos una foto, tu idea o tu archivo STL. Cotiza por WhatsApp.">
 <meta property="og:type" content="website">
@@ -97,13 +110,17 @@
   /* Caminos del inicio: al cotizador de llaveros o a "Arma tu pedido" */
   .camino { grid-area: camino; align-self: start; display: grid; gap: 10px; animation: subir .7s .35s both; }
   .camino-t { font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; font-size: 1.05rem; }
-  .ruta { display: grid; grid-template-columns: 58px 1fr auto; align-items: center; gap: 14px; text-align: left; font: inherit; color: var(--texto); background: var(--sup);
+  .ruta { display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: 14px; text-align: left; font: inherit; color: var(--texto); background: var(--sup);
     border: 3px solid var(--borde); border-radius: 20px; padding: 9px 18px 9px 9px; cursor: pointer;
     transition: transform .15s cubic-bezier(.2,1.6,.4,1), box-shadow .15s, border-color .15s; }
-  .ruta img { width: 58px; height: 58px; border-radius: 13px; object-fit: cover; border: 3px solid #000; }
+  .ruta img { width: 52px; height: 52px; border-radius: 13px; object-fit: cover; border: 3px solid #000; }
   .ruta b { display: block; font-weight: 800; font-size: 1.15rem; line-height: 1.15; }
   .ruta small { display: block; color: var(--suave); font-size: .92rem; line-height: 1.2; margin-top: 2px; }
   .ruta i { font-style: normal; font-weight: 800; font-size: 1.6rem; color: var(--dorado); transition: transform .15s; }
+  .ruta.chica { grid-template-columns: 40px 1fr auto; padding: 6px 16px 6px 6px; border-style: dashed; }
+  .ruta.chica b { font-size: 1.02rem; }
+  .q-ico { width: 40px; height: 40px; border-radius: 11px; background: var(--dorado); color: var(--fondo); display: grid; place-items: center; font-weight: 800; border: 3px solid #000; }
+  .armar h2 { font-size: clamp(3rem, 8.6vw, 5.6rem); }
   .ruta:hover { transform: translate(-2px, -2px); border-color: var(--dorado); box-shadow: 6px 6px 0 var(--dorado); }
   .ruta:hover i { transform: translateX(5px); }
   .ruta.principal { background: var(--dorado); color: var(--fondo); border-color: #000; box-shadow: 6px 6px 0 #000; }
@@ -163,7 +180,7 @@
   .icono svg { width: 30px; height: 30px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
   /* Precios */
-  .sec-precios { padding: 10px 0 90px; }
+  .sec-precios { padding: 70px 0 90px; }
   .calc-fila { display: grid; grid-template-columns: 400px 1fr; gap: 44px; align-items: center; margin-top: 36px; }
   .calc { background: var(--sup); border: 3px solid var(--borde); border-radius: 22px; padding: 26px; box-shadow: 12px 12px 0 var(--dorado); display: grid; gap: 20px; }
   .campo > span { display: block; font-weight: 600; margin-bottom: 10px; }
@@ -299,8 +316,20 @@
   .ver { --ty: 0px; --rx: 0deg; --ry: 0deg; --rot: 0deg; transform-style: preserve-3d;
     transform: perspective(900px) translateY(var(--ty)) rotateX(var(--rx)) rotateY(var(--ry)) rotate(var(--rot));
     transition: opacity .6s, transform .75s cubic-bezier(.2,1.35,.4,1), box-shadow .15s; }
-  .ver:not(.ya) { opacity: 0; --ty: 70px; --rx: -38deg; }
+  .js .ver:not(.ya) { opacity: 0; --ty: 70px; --rx: -38deg; }
+  .revelar .ver:not(.ya) { opacity: 1; --ty: 0px; --rx: 0deg; }
   .ver.tilt { transition: transform .09s linear, box-shadow .15s; }
+
+  /* Modo ligero (navegadores internos de redes): sin 3D, sin desenfoques y con animaciones simples */
+  .lite header, .lite .barra-envio { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .lite header { background: rgba(17,17,20,.97); }
+  .lite #gl, .lite #filamento { display: none; }
+  .lite .ancla3d:not(#a1), .lite .llav-juego { display: none; }
+  .lite .cab, .lite .cab-llav { grid-template-columns: 1fr; }
+  .lite .ver { transform: none; transition: opacity .5s; }
+  .lite .js .ver:not(.ya), .lite.js .ver:not(.ya) { opacity: 0; transform: none; }
+  .lite .hero h1 { perspective: none; }
+  .lite .hero h1 span, .lite #rota, .lite .cinta div, .lite .chat .btn:not(:hover), .lite .ruta i, .lite .pasos i { animation: none; }
 
   @media (max-width: 900px) {
     .menu a:not(.btn) { display: none; }
@@ -362,61 +391,18 @@
 
       <div class="camino" id="camino">
         <span class="camino-t">¿Qué quieres imprimir?</span>
-        <a class="ruta principal" href="#precios">
-          <img src="img/mini/f01.jpg" alt=""><span><b>Llaveros con mi logo</b><small>Mira cuánto cuestan</small></span><i>→</i>
-        </a>
+        <button class="ruta principal" type="button" data-pieza="Llaveros">
+          <img src="img/mini/f01.jpg" alt=""><span><b>Llaveros con mi logo</b><small>Arma tu pedido</small></span><i>→</i>
+        </button>
         <button class="ruta" type="button" data-pieza="Otra pieza" data-tipo="imprimir mi archivo" data-tengo="El archivo (STL, OBJ o 3MF)">
           <img src="img/mini/f04.jpg" alt=""><span><b>Imprimir mi archivo</b><small>STL, OBJ o 3MF</small></span><i>→</i>
         </button>
         <button class="ruta" type="button" data-tipo="una idea que tengo" data-tengo="Solo la idea">
           <img src="img/mini/f10.jpg" alt=""><span><b>Una idea o algo que vi</b><small>Cuéntanos y lo armamos</small></span><i>→</i>
         </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRECIOS -->
-  <section class="sec-precios">
-    <div class="cont">
-      <div class="precios" id="precios">
-        <h2>Precios <span class="acento">claros</span></h2>
-        <p class="sub">El precio de cada llavero personalizado depende de <b>cuántos colores</b> lleva y <b>cuántos pides</b>. Calcula el tuyo:</p>
-        <div class="calc-fila">
-          <div class="calc ver">
-            <div class="campo"><span>¿Cuántos colores lleva?</span><div class="ncol" id="ncol"></div></div>
-            <div class="campo"><span>¿Cuántos llaveros?</span>
-              <div class="cant"><input type="range" id="rango" min="1" max="500" value="25" aria-label="Cantidad de llaveros"><input type="number" id="cuantos" min="1" max="500" value="25" aria-label="Cantidad de llaveros"></div>
-            </div>
-            <div class="resultado">
-              <div><small>Cada uno</small><strong id="pu">Q13</strong></div>
-              <div><small>Total</small><strong id="total">Q325</strong></div>
-            </div>
-            <button class="btn" id="pedir" type="button">Armar mi pedido con esto →</button>
-          </div>
-          <table class="tabla" id="tabla">
-            <caption>Precio por unidad, en quetzales. ¿Más de 500? Escríbenos.</caption>
-            <thead><tr><th></th><th><b>1 – 14</b>unidades</th><th><b>15 – 49</b>unidades</th><th><b>50 – 99</b>unidades</th><th><b>100 – 500</b>unidades</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-
-        <div class="archivos ver">
-          <div>
-            <h3>¿Ya tienes tu archivo? Lo imprimimos</h3>
-            <p>Mándanos tu archivo (STL, OBJ o 3MF) y lo imprimimos en PLA o PETG. Se cobra por tiempo y por material:</p>
-            <div class="tarifas">
-              <div style="--c:var(--dorado)"><strong>Q5</strong><span>por hora de impresión</span></div>
-              <i>+</i>
-              <div style="--c:var(--verde)"><strong>Q1</strong><span>por gramo de PLA o PETG</span></div>
-            </div>
-            <p>El precio puede variar según la complejidad de la pieza.</p>
-          </div>
-          <div class="estim cta-stl">
-            <strong>Mándanos tu archivo</strong>
-            <small>Te decimos cuánto cuesta y cuánto tarda.</small>
-            <button class="btn" type="button" data-pieza="Otra pieza" data-tipo="imprimir mi archivo" data-tengo="El archivo (STL, OBJ o 3MF)"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.600 15.100L2 22l5-1.300A10 10 0 1 0 12 2Zm0 18.200a8.200 8.200 0 0 1-4.200-1.150l-.300-.180-3 .790.800-2.900-.200-.300A8.200 8.200 0 1 1 12 20.200Zm4.500-6.150c-.250-.120-1.460-.720-1.690-.800-.220-.080-.390-.120-.550.120-.160.250-.630.800-.780.970-.140.160-.290.180-.530.060-.250-.120-1.040-.380-1.980-1.220-.730-.650-1.230-1.460-1.370-1.700-.140-.250-.020-.380.110-.500.110-.110.250-.290.370-.430.120-.140.160-.250.250-.410.080-.160.040-.310-.020-.430-.060-.120-.550-1.330-.760-1.820-.200-.480-.400-.410-.550-.420h-.470c-.160 0-.430.060-.650.310-.220.250-.860.840-.860 2.050 0 1.210.880 2.380 1 2.540.120.160 1.730 2.640 4.190 3.700.590.250 1.040.400 1.400.520.590.190 1.120.160 1.550.100.470-.070 1.460-.600 1.660-1.170.200-.580.200-1.070.140-1.170-.060-.110-.220-.170-.470-.290Z"/></svg>Armar mi pedido</button>
-          </div>
-        </div>
+        <a class="ruta chica" href="#precios">
+          <span class="q-ico">Q</span><span><b>Conocer nuestros precios</b></span><i>→</i>
+        </a>
       </div>
     </div>
   </section>
@@ -484,6 +470,52 @@
         <div class="chat-cuerpo"><div class="burbuja" id="burbuja"><span id="txt"></span><time>ahora ✓✓</time></div></div>
         <button class="btn" id="enviar" type="button"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.600 15.100L2 22l5-1.300A10 10 0 1 0 12 2Zm0 18.200a8.200 8.200 0 0 1-4.200-1.150l-.300-.180-3 .790.800-2.900-.200-.300A8.200 8.200 0 1 1 12 20.200Zm4.500-6.150c-.250-.120-1.460-.720-1.690-.800-.220-.080-.390-.120-.550.120-.160.250-.630.800-.780.970-.140.160-.290.180-.530.060-.250-.120-1.040-.380-1.980-1.220-.730-.650-1.230-1.460-1.370-1.700-.140-.250-.020-.380.110-.500.110-.110.250-.290.370-.430.120-.140.160-.250.250-.410.080-.160.040-.310-.020-.430-.060-.120-.550-1.330-.760-1.820-.200-.480-.400-.410-.550-.420h-.470c-.160 0-.430.060-.650.310-.220.250-.860.840-.860 2.050 0 1.210.880 2.380 1 2.540.120.160 1.730 2.640 4.190 3.700.590.250 1.040.400 1.400.520.590.190 1.120.160 1.550.100.470-.070 1.460-.600 1.660-1.170.200-.580.200-1.070.140-1.170-.060-.110-.220-.170-.470-.290Z"/></svg>Enviar por WhatsApp</button>
         <p class="pista">Ya en el chat, adjunta tu foto, logo, archivo o el enlace de lo que viste.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRECIOS -->
+  <section class="sec-precios">
+    <div class="cont">
+      <div class="precios" id="precios">
+        <h2>Precios <span class="acento">claros</span></h2>
+        <p class="sub">El precio de cada llavero personalizado depende de <b>cuántos colores</b> lleva y <b>cuántos pides</b>. Calcula el tuyo:</p>
+        <div class="calc-fila">
+          <div class="calc ver">
+            <div class="campo"><span>¿Cuántos colores lleva?</span><div class="ncol" id="ncol"></div></div>
+            <div class="campo"><span>¿Cuántos llaveros?</span>
+              <div class="cant"><input type="range" id="rango" min="1" max="500" value="25" aria-label="Cantidad de llaveros"><input type="number" id="cuantos" min="1" max="500" value="25" aria-label="Cantidad de llaveros"></div>
+            </div>
+            <div class="resultado">
+              <div><small>Cada uno</small><strong id="pu">Q13</strong></div>
+              <div><small>Total</small><strong id="total">Q325</strong></div>
+            </div>
+            <button class="btn" id="pedir" type="button">Armar mi pedido con esto →</button>
+          </div>
+          <table class="tabla" id="tabla">
+            <caption>Precio por unidad, en quetzales. ¿Más de 500? Escríbenos.</caption>
+            <thead><tr><th></th><th><b>1 – 14</b>unidades</th><th><b>15 – 49</b>unidades</th><th><b>50 – 99</b>unidades</th><th><b>100 – 500</b>unidades</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="archivos ver">
+          <div>
+            <h3>¿Ya tienes tu archivo? Lo imprimimos</h3>
+            <p>Mándanos tu archivo (STL, OBJ o 3MF) y lo imprimimos en PLA o PETG. Se cobra por tiempo y por material:</p>
+            <div class="tarifas">
+              <div style="--c:var(--dorado)"><strong>Q5</strong><span>por hora de impresión</span></div>
+              <i>+</i>
+              <div style="--c:var(--verde)"><strong>Q1</strong><span>por gramo de PLA o PETG</span></div>
+            </div>
+            <p>El precio puede variar según la complejidad de la pieza.</p>
+          </div>
+          <div class="estim cta-stl">
+            <strong>Mándanos tu archivo</strong>
+            <small>Te decimos cuánto cuesta y cuánto tarda.</small>
+            <button class="btn" type="button" data-pieza="Otra pieza" data-tipo="imprimir mi archivo" data-tengo="El archivo (STL, OBJ o 3MF)"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.600 15.100L2 22l5-1.300A10 10 0 1 0 12 2Zm0 18.200a8.200 8.200 0 0 1-4.200-1.150l-.300-.180-3 .790.800-2.900-.200-.300A8.200 8.200 0 1 1 12 20.200Zm4.500-6.150c-.250-.120-1.460-.720-1.690-.800-.220-.080-.390-.120-.550.120-.160.250-.630.800-.780.970-.140.160-.290.180-.530.060-.250-.120-1.040-.380-1.980-1.220-.730-.650-1.230-1.460-1.370-1.700-.140-.250-.020-.380.110-.500.110-.110.250-.290.370-.430.120-.140.160-.250.250-.410.080-.160.040-.310-.020-.430-.060-.120-.550-1.330-.760-1.820-.200-.480-.400-.410-.550-.420h-.470c-.160 0-.430.060-.650.310-.220.250-.860.840-.860 2.050 0 1.210.880 2.380 1 2.540.120.160 1.730 2.640 4.190 3.700.590.250 1.040.400 1.400.520.590.190 1.120.160 1.550.100.470-.070 1.460-.600 1.660-1.170.200-.580.200-1.070.140-1.170-.060-.110-.220-.170-.470-.290Z"/></svg>Armar mi pedido</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -785,17 +817,21 @@
   })();
 
   // Aparecer al hacer scroll
-  const obs = new IntersectionObserver((entradas) => {
-    entradas.forEach((en, i) => {
-      if (!en.isIntersecting) return;
-      const el = en.target;
-      el.style.transitionDelay = (i * 110) + "ms";
-      el.classList.add("ya");
-      setTimeout(() => { el.style.transitionDelay = ""; }, 1100 + i * 110);
-      obs.unobserve(el);
-    });
-  }, { threshold: 0.15 });
-  document.querySelectorAll(".ver").forEach((el) => obs.observe(el));
+  window.__listo = true;
+  if (!("IntersectionObserver" in window)) document.querySelectorAll(".ver").forEach((el) => el.classList.add("ya"));
+    else {
+    const obs = new IntersectionObserver((entradas) => {
+      entradas.forEach((en, i) => {
+        if (!en.isIntersecting) return;
+        const el = en.target;
+        el.style.transitionDelay = (i * 110) + "ms";
+        el.classList.add("ya");
+        setTimeout(() => { el.style.transitionDelay = ""; }, 1100 + i * 110);
+        obs.unobserve(el);
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll(".ver").forEach((el) => obs.observe(el));
+  }
 
   // Barra de avance y filamento que se va "imprimiendo" al bajar
   const avance = document.getElementById("avance"), filamento = document.getElementById("filamento"), principal = document.querySelector("main");
@@ -853,11 +889,22 @@
   }
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  // La escena 3D solo se descarga fuera de los navegadores internos de redes sociales
+  (function () {
+    if (window.LITE) return;
+    var s = document.createElement("script");
+    s.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
+    s.async = true;
+    s.onload = function () { if (window.iniciar3D) window.iniciar3D(); else window.__tres = true; };
+    document.body.appendChild(s);
+  })();
+</script>
 <script>
 // ====== Escena 3D: el llavero se imprime en la portada y te acompaña por la página ======
-(function () {
-  if (!window.THREE) return;
+window.iniciar3D = function () {
+  if (window.__3dIniciada || !window.THREE) return;
+  window.__3dIniciada = true;
   const canvas = document.getElementById("gl");
   const anclas = [...document.querySelectorAll(".ancla3d")];
   const estado = document.getElementById("estado");
@@ -1115,7 +1162,8 @@
     renderer.render(scene, cam);
   }
   cuadro();
-})();
+};
+if (window.__tres) window.iniciar3D();
 </script>
 </body>
 </html>
