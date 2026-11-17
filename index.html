@@ -5,15 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#111114">
 <script>
-  // Modo ligero: dentro de Instagram, Facebook o TikTok no se carga la escena 3D ni los efectos pesados
+  // Modo ligero: dentro de Instagram, Facebook o TikTok se apagan los efectos pesados de CSS (el 3D se queda)
   (function () {
     var ua = navigator.userAgent || "", d = document.documentElement, q = location.search;
     var red = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|TikTok|musical_ly|BytedanceWebview|Snapchat|MicroMessenger|Pinterest|Line\//i.test(ua) || /[?&]lite=1/.test(q);
-    var gl = /[?&]gl=1/.test(q), fx = /[?&]fx=1/.test(q);   // banderas de prueba para saber qué falla en cada navegador
-    window.SIN3D = red && !gl;
+    // Prueba en Instagram: el 3D y los efectos pesados por separado funcionan, pero juntos dejaban la pantalla negra.
+    // Por eso en navegadores internos queda el 3D encendido y los efectos pesados apagados.
+    var fx = /[?&]fx=1/.test(q), nogl = /[?&]nogl=1/.test(q);   // banderas de prueba: ?fx=1 efectos pesados, ?nogl=1 sin 3D
+    window.SIN3D = nogl;
     d.classList.add("js");
     if (red && !fx) d.classList.add("lite");
-    if (window.SIN3D) d.classList.add("sin3d");
+    if (nogl) d.classList.add("sin3d");
     // Red de seguridad: si por algo falla el resto del código, el contenido se muestra igual
     setTimeout(function () { if (!window.__listo) d.classList.add("revelar"); }, 3500);
   })();
