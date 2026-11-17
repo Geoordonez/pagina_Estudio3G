@@ -7,11 +7,13 @@
 <script>
   // Modo ligero: dentro de Instagram, Facebook o TikTok no se carga la escena 3D ni los efectos pesados
   (function () {
-    var ua = navigator.userAgent || "", d = document.documentElement;
-    var lite = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|TikTok|musical_ly|BytedanceWebview|Snapchat|MicroMessenger|Pinterest|Line\//i.test(ua) || /[?&]lite=1/.test(location.search);
-    window.LITE = lite;
+    var ua = navigator.userAgent || "", d = document.documentElement, q = location.search;
+    var red = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|TikTok|musical_ly|BytedanceWebview|Snapchat|MicroMessenger|Pinterest|Line\//i.test(ua) || /[?&]lite=1/.test(q);
+    var gl = /[?&]gl=1/.test(q), fx = /[?&]fx=1/.test(q);   // banderas de prueba para saber qué falla en cada navegador
+    window.SIN3D = red && !gl;
     d.classList.add("js");
-    if (lite) d.classList.add("lite");
+    if (red && !fx) d.classList.add("lite");
+    if (window.SIN3D) d.classList.add("sin3d");
     // Red de seguridad: si por algo falla el resto del código, el contenido se muestra igual
     setTimeout(function () { if (!window.__listo) d.classList.add("revelar"); }, 3500);
   })();
@@ -323,9 +325,9 @@
   /* Modo ligero (navegadores internos de redes): sin 3D, sin desenfoques y con animaciones simples */
   .lite header, .lite .barra-envio { -webkit-backdrop-filter: none; backdrop-filter: none; }
   .lite header { background: rgba(17,17,20,.97); }
-  .lite #gl, .lite #filamento { display: none; }
-  .lite .ancla3d:not(#a1), .lite .llav-juego { display: none; }
-  .lite .cab, .lite .cab-llav { grid-template-columns: 1fr; }
+  .sin3d #gl, .lite #filamento { display: none; }
+  .sin3d .ancla3d:not(#a1), .sin3d .llav-juego { display: none; }
+  .sin3d .cab, .sin3d .cab-llav { grid-template-columns: 1fr; }
   .lite .ver { transform: none; transition: opacity .5s; }
   .lite .js .ver:not(.ya), .lite.js .ver:not(.ya) { opacity: 0; transform: none; }
   .lite .hero h1 { perspective: none; }
@@ -892,7 +894,7 @@
 <script>
   // La escena 3D solo se descarga fuera de los navegadores internos de redes sociales
   (function () {
-    if (window.LITE) return;
+    if (window.SIN3D) return;
     var s = document.createElement("script");
     s.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
     s.async = true;
