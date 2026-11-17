@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>3G · Llaveros personalizados e impresión 3D en Guatemala</title>
-<meta name="description" content="3G: llaveros personalizados impresos en 3D en Guatemala. Para negocios, eventos, mayoreo y menudeo. Solo necesitamos una foto o tu logo. Cotiza por WhatsApp.">
+<meta name="description" content="3G: llaveros personalizados y piezas impresas en 3D en Guatemala. Para negocios, eventos, mayoreo y menudeo. Solo necesitamos una foto, tu idea o tu archivo STL. Cotiza por WhatsApp.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_GT">
 <meta property="og:url" content="https://geoordonez.github.io/pagina_Estudio3G/">
 <meta property="og:title" content="3G · Llaveros personalizados en 3D">
-<meta property="og:description" content="Para tu negocio, tu evento o para regalar. Solo necesitamos una foto o tu logo. Cotiza por WhatsApp.">
+<meta property="og:description" content="Llaveros personalizados y piezas a tu medida. Solo necesitamos una foto, tu idea o tu archivo STL. Cotiza por WhatsApp.">
 <meta property="og:image" content="https://geoordonez.github.io/pagina_Estudio3G/img/llaveros.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" id="favicon" href="img/logo.jpg">
@@ -67,10 +67,9 @@
   .menu .btn { padding: 10px 18px; font-size: .9rem; box-shadow: 4px 4px 0 #000; }
 
   /* Portada con cotización */
-  .hero { padding: 48px 0 70px; }
-  .hero .cont { display: grid; grid-template-columns: 1fr 430px; grid-template-areas: "texto form" "caja form"; gap: 10px 56px; align-items: start; }
-  .hero .texto { grid-area: texto; }
-  .hero form { grid-area: form; }
+  .hero { padding: 40px 0 70px; }
+  .hero .cont { display: grid; grid-template-columns: 1.05fr .95fr; grid-template-areas: "texto caja" "rapido caja"; gap: 26px 40px; align-items: center; }
+  .hero .texto { grid-area: texto; align-self: end; }
   .caja3d { grid-area: caja; position: relative; }
   .chapa { display: inline-block; background: var(--dorado); color: var(--fondo); font-weight: 800; text-transform: uppercase; font-size: .9rem;
     padding: 7px 16px; border-radius: 999px; border: 3px solid #000; box-shadow: 4px 4px 0 #000; transform: rotate(-3deg); margin-bottom: 22px; }
@@ -85,14 +84,43 @@
   .ancla3d { position: relative; cursor: pointer; outline: none; }
   .ancla3d::before { content: ""; position: absolute; inset: 0; pointer-events: none;
     background: radial-gradient(circle at 50% 55%, rgba(214,164,23,.20), transparent 62%); }
-  #a1 { height: 330px; max-width: 460px; }
+  #a1 { height: 540px; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+  #a1:active { cursor: grabbing; }
   .respaldo { border: 8px solid var(--texto); box-shadow: 10px 10px 0 #000; height: 100%; overflow: hidden; }
   .respaldo img { width: 100%; height: 100%; object-fit: cover; }
   .con3d .respaldo { display: none; }
   .estado { width: max-content; max-width: 100%; padding: 8px 16px; border-radius: 999px; background: var(--sup);
-    border: 2px solid var(--borde); font-weight: 600; font-size: .92rem; color: var(--suave); display: none; margin-left: 70px; }
+    border: 2px solid var(--borde); font-weight: 600; font-size: .92rem; color: var(--suave); display: none; margin: 4px auto 0; }
   .con3d .estado { display: block; }
   .estado b { color: var(--texto); }
+
+  /* Cotizador corto de la portada */
+  .rapido { grid-area: rapido; align-self: start; background: var(--sup); border: 3px solid var(--borde); border-radius: 22px; padding: 18px 20px;
+    box-shadow: 10px 10px 0 var(--dorado); display: grid; gap: 14px; animation: subir .7s .35s both; }
+  .rap-fila { display: grid; grid-template-columns: 82px 1fr; align-items: center; gap: 12px; }
+  .rap-t { font-weight: 600; color: var(--suave); font-size: .95rem; }
+  .cants { display: flex; gap: 8px; flex-wrap: wrap; }
+  .cants button { font: 800 1.05rem "Outfit", sans-serif; color: var(--texto); background: var(--fondo); border: 2px solid var(--borde); border-radius: 12px;
+    min-width: 54px; min-height: 46px; padding: 0 12px; cursor: pointer; transition: transform .15s cubic-bezier(.2,1.6,.4,1); }
+  .cants button:hover { transform: translateY(-3px); }
+  .cants button.activo { background: var(--dorado); color: var(--fondo); border-color: #000; box-shadow: 4px 4px 0 #000; }
+  .rapido .ncol button { min-height: 52px; }
+  .rap-res { display: grid; grid-template-columns: auto auto 1fr; gap: 18px; align-items: center; }
+  .rap-res small { display: block; color: var(--suave); font-size: .85rem; line-height: 1.1; }
+  .rap-res strong { font-size: 2.1rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; display: inline-block; }
+  .rap-res > div:first-child strong { color: var(--dorado); }
+  .rap-res strong.pum { animation: pum .3s cubic-bezier(.2,1.8,.4,1); }
+  .rap-res .btn { padding: 13px 18px; }
+  .mas-info { color: var(--dorado); font-weight: 600; font-size: .95rem; text-align: center; padding: 2px 0; }
+  .mas-info:hover { text-decoration: underline; }
+
+  /* Palabra del titular que va cambiando */
+  .hero h1 span:nth-child(2) { perspective: 600px; }
+  #rota { display: inline-block; transform-origin: 50% 100%; }
+  #rota.sale { animation: voltea-sale .26s ease-in forwards; }
+  #rota.entra { animation: voltea-entra .45s cubic-bezier(.2,1.5,.4,1); }
+  @keyframes voltea-sale { to { opacity: 0; transform: translateY(-35%) rotateX(80deg); } }
+  @keyframes voltea-entra { from { opacity: 0; transform: translateY(35%) rotateX(-80deg); } }
 
   form { background: var(--sup); border: 3px solid var(--borde); border-radius: 22px; padding: 28px; box-shadow: 12px 12px 0 var(--dorado);
     display: grid; gap: 14px; animation: subir .7s .35s both; }
@@ -184,7 +212,7 @@
   .pasos i { color: var(--dorado); font-style: normal; font-size: 1.4rem; }
 
   /* Galería */
-  .trabajos { padding: 70px 0 40px; }
+  .trabajos { padding: 70px 0 90px; }
   .cab { display: grid; grid-template-columns: 1fr 240px; gap: 30px; align-items: center; }
   #a3 { height: 240px; }
   .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 30px; }
@@ -218,6 +246,8 @@
 
   .wa { position: fixed; right: 20px; bottom: 20px; z-index: 60; width: 62px; height: 62px; border-radius: 50%; background: #25D366; border: 3px solid #000; box-shadow: 5px 5px 0 #000; display: grid; place-items: center; }
   .wa svg { width: 32px; height: 32px; fill: #fff; }
+  .wa { transition: opacity .25s, transform .25s; }
+  .wa.oculto { opacity: 0; transform: scale(.6); pointer-events: none; }
 
   /* Aparecer en 3D al hacer scroll */
   .ver { --ty: 0px; --rx: 0deg; --ry: 0deg; --rot: 0deg; transform-style: preserve-3d;
@@ -228,10 +258,18 @@
 
   @media (max-width: 900px) {
     .menu a:not(.btn) { display: none; }
-    .hero { padding-top: 30px; }
-    .hero .cont { grid-template-columns: 1fr; grid-template-areas: "texto" "form" "caja"; gap: 28px; }
-    #a1 { height: 300px; margin-inline: auto; }
-    .estado { margin-inline: auto; }
+    .hero { padding: 26px 0 50px; }
+    .hero .cont { grid-template-columns: 1fr; grid-template-areas: "texto" "caja" "rapido"; gap: 14px; }
+    .hero .texto { align-self: start; }
+    #a1 { height: 350px; }
+    .rap-fila { grid-template-columns: 1fr; gap: 8px; }
+    .rap-res { grid-template-columns: 1fr 1fr; } .rap-res .btn { grid-column: 1 / -1; }
+    .cants button { flex: 1; min-width: 0; padding: 0 6px; }
+    .wa { width: 52px; height: 52px; right: 14px; bottom: 14px; } .wa svg { width: 28px; height: 28px; }
+    .collage .chapa { top: auto; bottom: -14px; left: 8px; }
+    .cant input[type=range] { height: 44px; }
+    .tabla th b { white-space: nowrap; } .tabla tbody th { font-size: .85rem; }
+    .tarifas { flex-direction: column; align-items: flex-start; gap: 4px; } .tarifas > i { font-size: 1.5rem; padding-left: 6px; line-height: 1; }
     .fila, .final .cont, .grid3, .calc-fila, .archivos { grid-template-columns: 1fr; gap: 30px; }
     .sec-precios { padding-bottom: 60px; } .tabla { border-spacing: 4px; } .tabla td { font-size: 1.05rem; padding: 11px 2px; } .tabla th { font-size: .8rem; } .tabla th b { font-size: .95rem; }
     .archivos { padding: 22px; } .tarifas strong { font-size: 2.8rem; }
@@ -266,57 +304,31 @@
 <main>
   <div id="filamento" aria-hidden="true"><svg viewBox="0 0 100 1000" preserveAspectRatio="none"><path vector-effect="non-scaling-stroke" d="M4 0 C4 70 96 60 96 140 S4 210 4 290 S96 360 96 440 S4 510 4 590 S96 660 96 740 S4 810 4 880 S50 950 50 1000"/></svg></div>
 
-  <!-- PORTADA + COTIZACIÓN -->
+  <!-- PORTADA -->
   <section class="hero" id="cotizar">
     <div class="cont">
       <div class="texto">
-        <span class="chapa">Llaveros 3D · Guatemala</span>
-        <h1><span>Tu llavero,</span><span class="acento">impreso</span><span>en 3D.</span></h1>
-        <p class="sub">Para tu negocio, tu evento o para regalar. <b>Solo necesitamos una foto o tu logo</b> y lo convertimos en llavero, del color que quieras.</p>
+        <span class="chapa">Llaveros y piezas 3D · Guatemala</span>
+        <h1><span>Imprimimos</span><span>tu <b id="rota" class="acento">llavero</b></span><span>en 3D.</span></h1>
+        <p class="sub">Mándanos una foto, tu idea o tu archivo STL.</p>
       </div>
 
-      <form id="form">
-        <h2>Cotiza <span class="acento">ya</span></h2>
-        <p>Llena esto y se abre WhatsApp con tu mensaje listo.</p>
-        <label>Tu nombre
-          <input name="nombre" required placeholder="¿Cómo te llamas?">
-        </label>
-        <div class="dos">
-          <label>¿Qué necesitas?
-            <select name="tipo">
-              <option>Llaveros para mi negocio</option>
-              <option>Llaveros para un evento</option>
-              <option>Llaveros al por mayor</option>
-              <option>Un llavero personalizado</option>
-              <option>Otra pieza en 3D</option>
-            </select>
-          </label>
-          <label>Cantidad
-            <input name="cantidad" type="number" min="1" value="1" required>
-          </label>
-        </div>
-        <label>¿Qué tienes para empezar?
-          <select name="tengo">
-            <option>Una foto o mi logo</option>
-            <option>El archivo STL</option>
-            <option>Solo la idea</option>
-          </select>
-        </label>
-        <label>Cuéntanos más <span style="font-weight:400;color:var(--suave)">(opcional)</span>
-          <textarea name="idea" placeholder="Colores, tamaño, fecha del evento…"></textarea>
-        </label>
-        <button class="btn" type="submit">
-          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.600 15.100L2 22l5-1.300A10 10 0 1 0 12 2Zm0 18.200a8.200 8.200 0 0 1-4.200-1.150l-.300-.180-3 .790.800-2.900-.200-.300A8.200 8.200 0 1 1 12 20.200Zm4.500-6.150c-.250-.120-1.460-.720-1.690-.800-.220-.080-.390-.120-.550.120-.160.250-.630.800-.780.970-.140.160-.290.180-.530.060-.250-.120-1.040-.380-1.980-1.220-.730-.650-1.230-1.460-1.370-1.700-.140-.250-.020-.380.110-.500.110-.110.250-.290.370-.430.120-.140.160-.250.250-.410.080-.160.040-.310-.020-.430-.060-.120-.550-1.330-.760-1.820-.200-.480-.400-.410-.550-.420h-.470c-.160 0-.430.060-.650.310-.220.250-.860.840-.860 2.050 0 1.210.880 2.380 1 2.540.120.160 1.730 2.640 4.190 3.700.590.250 1.040.400 1.400.520.590.190 1.120.160 1.550.100.470-.070 1.460-.600 1.660-1.170.200-.580.200-1.070.140-1.170-.060-.110-.220-.170-.470-.290Z"/></svg>
-          Enviar por WhatsApp
-        </button>
-        <p class="pista">Ya en el chat, adjunta tu foto, logo o archivo STL.</p>
-      </form>
-
       <div class="caja3d">
-        <div class="ancla3d" id="a1" role="button" tabindex="0" aria-label="Llavero en 3D. Tócalo para imprimir otro color.">
+        <div class="ancla3d" id="a1" data-k="0.64" data-dy="0.75" role="button" tabindex="0" aria-label="Llavero en 3D rodeado de fotos de trabajos reales. Arrastra para girar; toca el llavero para cambiarle el color.">
           <div class="respaldo"><img src="img/trio.jpg" alt="Llaveros personalizados impresos en 3D por 3G"></div>
         </div>
         <div class="estado" id="estado">Imprimiendo tu llavero…</div>
+      </div>
+
+      <div class="rapido" id="rapido">
+        <div class="rap-fila"><span class="rap-t">Colores</span><div class="ncol" id="hncol"></div></div>
+        <div class="rap-fila"><span class="rap-t">Cantidad</span><div class="cants" id="hcants"></div></div>
+        <div class="rap-res">
+          <div><small>Cada uno</small><strong id="hpu">Q13</strong></div>
+          <div><small>Total</small><strong id="htotal">Q325</strong></div>
+          <a class="btn" id="hpedir" href="#cotizar" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.600 15.100L2 22l5-1.300A10 10 0 1 0 12 2Zm0 18.200a8.200 8.200 0 0 1-4.200-1.150l-.300-.180-3 .790.800-2.900-.200-.300A8.200 8.200 0 1 1 12 20.200Zm4.500-6.150c-.250-.120-1.460-.720-1.690-.800-.220-.080-.390-.120-.550.120-.160.250-.630.800-.780.970-.140.160-.290.180-.530.060-.250-.120-1.040-.380-1.980-1.220-.730-.650-1.230-1.460-1.370-1.700-.140-.250-.020-.380.110-.500.110-.110.250-.290.370-.430.120-.140.160-.250.250-.410.080-.160.040-.310-.020-.430-.060-.120-.550-1.330-.760-1.820-.200-.480-.400-.410-.550-.420h-.470c-.160 0-.430.060-.650.310-.220.250-.860.840-.860 2.050 0 1.210.880 2.380 1 2.540.120.160 1.730 2.640 4.190 3.700.590.250 1.040.400 1.400.520.590.190 1.120.160 1.550.100.470-.070 1.460-.600 1.660-1.170.200-.580.200-1.070.140-1.170-.060-.110-.220-.170-.470-.290Z"/></svg>Pedir</a>
+        </div>
+        <a class="mas-info" href="#formulario">¿Pieza, evento o STL? Cuéntanos →</a>
       </div>
     </div>
   </section>
@@ -438,6 +450,53 @@
     </div>
   </section>
 
+  <!-- CIERRE -->
+  <section class="final" id="formulario">
+    <div class="cont">
+      <div>
+        <h2>¿Hacemos <span class="acento">el tuyo?</span></h2>
+        <p class="sub">Mándanos tu foto, tu logo o tu archivo STL.</p>
+        <a class="btn js-wa" href="#cotizar"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.600 15.100L2 22l5-1.300A10 10 0 1 0 12 2Zm0 18.200a8.200 8.200 0 0 1-4.200-1.150l-.300-.180-3 .790.800-2.900-.200-.300A8.200 8.200 0 1 1 12 20.200Zm4.500-6.150c-.250-.120-1.460-.720-1.690-.800-.220-.080-.390-.120-.550.120-.160.250-.630.800-.780.970-.140.160-.290.180-.530.060-.250-.120-1.040-.380-1.980-1.220-.730-.650-1.230-1.460-1.370-1.700-.140-.250-.020-.380.110-.500.110-.110.250-.290.370-.430.120-.140.160-.250.250-.410.080-.160.040-.310-.020-.430-.060-.120-.550-1.330-.760-1.820-.200-.480-.400-.410-.550-.420h-.470c-.160 0-.430.060-.650.310-.220.250-.860.840-.860 2.050 0 1.210.880 2.380 1 2.540.120.160 1.730 2.640 4.190 3.700.590.250 1.040.400 1.400.520.590.190 1.120.160 1.550.100.470-.070 1.460-.600 1.660-1.170.200-.580.200-1.070.140-1.170-.060-.110-.220-.170-.470-.290Z"/></svg>WhatsApp 3877-5069</a>
+      </div>
+      <form id="form">
+        <h2>Cuéntanos <span class="acento">tu idea</span></h2>
+        <p>Llena esto y se abre WhatsApp con tu mensaje listo.</p>
+        <label>Tu nombre
+          <input name="nombre" required placeholder="¿Cómo te llamas?">
+        </label>
+        <div class="dos">
+          <label>¿Qué necesitas?
+            <select name="tipo">
+              <option>Llaveros para mi negocio</option>
+              <option>Llaveros para un evento</option>
+              <option>Llaveros al por mayor</option>
+              <option>Un llavero personalizado</option>
+              <option>Otra pieza en 3D</option>
+            </select>
+          </label>
+          <label>Cantidad
+            <input name="cantidad" type="number" min="1" value="1" required>
+          </label>
+        </div>
+        <label>¿Qué tienes para empezar?
+          <select name="tengo">
+            <option>Una foto o mi logo</option>
+            <option>El archivo STL</option>
+            <option>Solo la idea</option>
+          </select>
+        </label>
+        <label>Cuéntanos más <span style="font-weight:400;color:var(--suave)">(opcional)</span>
+          <textarea name="idea" placeholder="Colores, tamaño, fecha del evento…"></textarea>
+        </label>
+        <button class="btn" type="submit">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.600 15.100L2 22l5-1.300A10 10 0 1 0 12 2Zm0 18.200a8.200 8.200 0 0 1-4.200-1.150l-.300-.180-3 .790.800-2.900-.200-.300A8.200 8.200 0 1 1 12 20.200Zm4.500-6.150c-.250-.120-1.460-.720-1.690-.800-.220-.080-.390-.120-.550.120-.160.250-.630.800-.780.970-.140.160-.290.180-.530.060-.250-.120-1.040-.380-1.980-1.220-.730-.650-1.230-1.460-1.370-1.700-.140-.250-.020-.380.110-.500.110-.110.250-.290.370-.430.120-.140.160-.250.250-.410.080-.160.040-.310-.020-.430-.060-.120-.550-1.330-.760-1.820-.200-.480-.400-.410-.550-.420h-.470c-.160 0-.430.060-.650.310-.220.250-.860.840-.860 2.050 0 1.210.880 2.380 1 2.540.120.160 1.730 2.640 4.190 3.700.590.250 1.040.400 1.400.520.590.190 1.120.160 1.550.100.470-.070 1.460-.600 1.660-1.170.200-.580.200-1.070.140-1.170-.060-.110-.220-.170-.470-.290Z"/></svg>
+          Enviar por WhatsApp
+        </button>
+        <p class="pista">Ya en el chat, adjunta tu foto, logo o archivo STL.</p>
+      </form>
+    </div>
+  </section>
+
   <!-- TRABAJOS -->
   <section class="trabajos" id="trabajos">
     <div class="cont">
@@ -454,20 +513,6 @@
     </div>
   </section>
 
-  <!-- CIERRE -->
-  <section class="final">
-    <div class="cont">
-      <div>
-        <h2>¿Hacemos <span class="acento">el tuyo?</span></h2>
-        <p class="sub">Escríbenos, mándanos tu foto y dinos cuántos quieres.</p>
-        <a class="btn js-wa" href="#cotizar">
-          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.600 15.100L2 22l5-1.300A10 10 0 1 0 12 2Zm0 18.200a8.200 8.200 0 0 1-4.200-1.150l-.300-.180-3 .790.800-2.900-.200-.300A8.200 8.200 0 1 1 12 20.200Zm4.500-6.150c-.250-.120-1.460-.720-1.690-.800-.220-.080-.390-.120-.550.120-.160.250-.630.800-.780.970-.140.160-.290.180-.530.060-.250-.120-1.040-.380-1.980-1.220-.730-.650-1.230-1.460-1.370-1.700-.140-.250-.020-.380.110-.500.110-.110.250-.290.370-.430.120-.140.160-.250.250-.410.080-.160.040-.310-.020-.430-.060-.120-.550-1.330-.760-1.820-.200-.480-.400-.410-.550-.420h-.470c-.160 0-.430.060-.650.310-.220.250-.860.840-.860 2.050 0 1.210.880 2.380 1 2.540.120.160 1.730 2.640 4.190 3.700.590.250 1.040.400 1.400.520.590.190 1.120.160 1.550.100.470-.070 1.460-.600 1.660-1.170.200-.580.200-1.070.140-1.170-.060-.110-.220-.170-.470-.290Z"/></svg>
-          WhatsApp 3877-5069
-        </a>
-      </div>
-      <div class="ancla3d" id="a4" role="button" tabindex="0" aria-label="Llavero en 3D"></div>
-    </div>
-  </section>
 </main>
 
 <footer>
@@ -539,22 +584,31 @@
   const Q_HORA = 5, Q_GRAMO = 1;   // imprimir archivos: por hora de impresión y por gramo de PLA/PETG
 
   (function () {
-    const ncol = document.getElementById("ncol"), cuerpo = document.querySelector("#tabla tbody");
+    const ncol = document.getElementById("ncol"), hncol = document.getElementById("hncol"), cuerpo = document.querySelector("#tabla tbody");
     const rango = document.getElementById("rango"), cuantos = document.getElementById("cuantos");
     const pu = document.getElementById("pu"), total = document.getElementById("total"), pedir = document.getElementById("pedir");
+    const hpu = document.getElementById("hpu"), htotal = document.getElementById("htotal"), hpedir = document.getElementById("hpedir"), hcants = document.getElementById("hcants");
     const PUNTOS = ["#D6A417", "#CF3F7E", "#2450C4", "#1F9E57"];
     let colores = 2, cant = 25;
     const tramo = (n) => (n <= 14 ? 0 : n <= 49 ? 1 : n < 100 ? 2 : 3);
 
     PRECIOS.forEach((fila, f) => {
-      const b = document.createElement("button");
-      b.type = "button"; b.setAttribute("aria-label", (f + 1) + (f ? " colores" : " color"));
-      b.innerHTML = (f + 1) + "<i>" + PUNTOS.slice(0, f + 1).map((c) => '<b style="background:' + c + '"></b>').join("") + "</i>";
-      b.addEventListener("click", () => { colores = f + 1; pintar(true); });
-      ncol.appendChild(b);
+      [ncol, hncol].forEach((cont) => {
+        const b = document.createElement("button");
+        b.type = "button"; b.setAttribute("aria-label", (f + 1) + (f ? " colores" : " color"));
+        b.innerHTML = (f + 1) + "<i>" + PUNTOS.slice(0, f + 1).map((c) => '<b style="background:' + c + '"></b>').join("") + "</i>";
+        b.addEventListener("click", () => { colores = f + 1; pintar(true); });
+        cont.appendChild(b);
+      });
       const tr = document.createElement("tr");
       tr.innerHTML = "<th>" + (f + 1) + (f ? " colores" : " color") + "</th>" + fila.map((p) => "<td>Q" + p + "</td>").join("");
       cuerpo.appendChild(tr);
+    });
+    [10, 25, 50, 100, 250].forEach((n) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.dataset.n = n; b.textContent = n; b.setAttribute("aria-label", n + " llaveros");
+      b.addEventListener("click", () => { cant = n; pintar(true); });
+      hcants.appendChild(b);
     });
     cuerpo.querySelectorAll("td").forEach((td) => {
       td.style.cursor = "pointer";
@@ -566,17 +620,21 @@
     });
 
     function pintar(animar) {
-      const t = tramo(cant), precio = PRECIOS[colores - 1][t];
+      const t = tramo(cant), precio = PRECIOS[colores - 1][t], tot = "Q" + (precio * cant).toLocaleString("es-GT");
       rango.value = cant; if (document.activeElement !== cuantos) cuantos.value = cant;
-      ncol.querySelectorAll("button").forEach((b, i) => b.classList.toggle("activo", i === colores - 1));
+      [ncol, hncol].forEach((c) => c.querySelectorAll("button").forEach((b, i) => b.classList.toggle("activo", i === colores - 1)));
+      hcants.querySelectorAll("button").forEach((b) => b.classList.toggle("activo", Number(b.dataset.n) === cant));
       cuerpo.querySelectorAll("tr").forEach((tr, f) => tr.querySelectorAll("td").forEach((td, c) => {
         td.className = f === colores - 1 && c === t ? "aqui" : f === colores - 1 ? "fil" : c === t ? "col" : "";
       }));
-      if (pu.textContent !== "Q" + precio && animar) { pu.classList.remove("pum"); void pu.offsetWidth; pu.classList.add("pum"); }
-      pu.textContent = "Q" + precio;
-      total.textContent = "Q" + (precio * cant).toLocaleString("es-GT");
-      pedir.href = wa("¡Hola 3G! Quiero " + cant + (cant === 1 ? " llavero" : " llaveros") + " de " + colores + (colores === 1 ? " color" : " colores") +
+      [pu, hpu].forEach((el) => {
+        if (el.textContent !== "Q" + precio && animar) { el.classList.remove("pum"); void el.offsetWidth; el.classList.add("pum"); }
+        el.textContent = "Q" + precio;
+      });
+      total.textContent = tot; htotal.textContent = tot;
+      const enlace = wa("¡Hola 3G! Quiero " + cant + (cant === 1 ? " llavero" : " llaveros") + " de " + colores + (colores === 1 ? " color" : " colores") +
         ". Según la página son Q" + precio + " cada uno (total Q" + precio * cant + ").");
+      pedir.href = enlace; hpedir.href = enlace;
     }
     const leer = (v) => Math.max(1, Math.min(500, Math.round(Number(v) || 1)));
     rango.addEventListener("input", () => { cant = leer(rango.value); pintar(true); });
@@ -666,6 +724,31 @@
   };
   addEventListener("scroll", alScroll, { passive: true }); addEventListener("resize", alScroll);
   new ResizeObserver(alScroll).observe(principal);
+
+  // La palabra del titular cambia: llavero, logo, pieza, idea
+  (function () {
+    const el = document.getElementById("rota");
+    if (!el || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const palabras = ["llavero", "logo", "pieza", "idea"]; let i = 0;
+    setInterval(() => {
+      el.classList.add("sale");
+      setTimeout(() => {
+        i = (i + 1) % palabras.length; el.textContent = palabras[i];
+        el.classList.remove("sale"); el.classList.add("entra");
+        setTimeout(() => el.classList.remove("entra"), 480);
+      }, 270);
+    }, 2400);
+  })();
+
+  // El botón flotante de WhatsApp se esconde cuando ya hay uno a la vista
+  (function () {
+    const flot = document.querySelector(".wa"), vistos = new Set();
+    const o = new IntersectionObserver((es) => {
+      es.forEach((e) => (e.isIntersecting ? vistos.add(e.target) : vistos.delete(e.target)));
+      flot.classList.toggle("oculto", vistos.size > 0);
+    });
+    ["#rapido", "#form", "footer"].forEach((s) => { const el = document.querySelector(s); if (el) o.observe(el); });
+  })();
 
   // Tarjetas y fotos que se inclinan en 3D con el cursor
   if (matchMedia("(hover: hover)").matches) {
@@ -776,7 +859,6 @@
     avanceImp = 0; listo = false; tListo = 0;
   }
   const a1 = document.getElementById("a1");
-  a1.addEventListener("click", reimprimir);
   a1.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); reimprimir(); } });
   botones.forEach((b) => b.addEventListener("click", () => { ponerColor(parseInt(b.dataset.c, 16)); salto = 1; }));
 
@@ -799,12 +881,62 @@
     scene.add(m); figuras.push(m);
   });
 
+  // ---------- Anillo de fotos reales: se gira arrastrando ----------
+  const visor = document.getElementById("visor");
+  // Llaveros y piezas alternados: f01, f13, f21, f27, f35 son llaveros; f04, f06, f10 son piezas
+  const RUTAS = ["t/f01.jpg", "t/f04.jpg", "t/f13.jpg", "t/f06.jpg", "t/f21.jpg", "t/f10.jpg", "t/f27.jpg", "t/f35.jpg"];
+  const RA = 3.0, PW = 1.6, PH = 2.15, INCL = 0.62, YC = -0.45;   // radio, tamaño de cada foto, inclinación y altura del anillo
+  const anillo = new THREE.Group(); scene.add(anillo);
+  const tarjetas = [];
+  const geoFoto = new THREE.PlaneGeometry(PW, PH), geoMarco = new THREE.PlaneGeometry(PW + 0.16, PH + 0.16);
+  RUTAS.forEach((ruta, i) => {
+    const g = new THREE.Group();
+    const marco = new THREE.Mesh(geoMarco, new THREE.MeshBasicMaterial({ color: 0xD6A417 }));
+    marco.position.z = -0.015;
+    const foto = new THREE.Mesh(geoFoto, new THREE.MeshBasicMaterial({ color: 0x777777, side: THREE.DoubleSide }));
+    g.add(marco, foto);
+    g.userData = { a: (i / RUTAS.length) * Math.PI * 2, src: "img/" + ruta, foto, marco, cargada: false };
+    anillo.add(g); tarjetas.push(g);
+    const im = new Image();
+    im.onload = () => {
+      try {
+        const c = document.createElement("canvas"); c.width = c.height = 512;
+        const x = c.getContext("2d"), asp = im.naturalWidth / im.naturalHeight, obj = PW / PH;
+        let sw = im.naturalWidth, sh = im.naturalHeight, sx = 0, sy = 0;
+        if (asp > obj) { sw = sh * obj; sx = (im.naturalWidth - sw) / 2; } else { sh = sw / obj; sy = (im.naturalHeight - sh) / 2; }
+        x.drawImage(im, sx, sy, sw, sh, 0, 0, 512, 512);
+        x.getImageData(0, 0, 1, 1);               // si el navegador no deja leer la imagen, se queda gris
+        foto.material.map = new THREE.CanvasTexture(c); foto.material.needsUpdate = true; g.userData.cargada = true;
+      } catch (e) {}
+    };
+    im.src = "img/" + ruta;
+  });
+
+  let arrastrando = false, xAnt = 0, movido = 0, giroAnillo = 0, velAnillo = 0, radioPx = 200, entrada = 0;
+  const rayo = new THREE.Raycaster(), pt = new THREE.Vector2();
+  function tocarEscena(e) {
+    pt.set(e.clientX / W * 2 - 1, -(e.clientY / H) * 2 + 1);
+    rayo.setFromCamera(pt, cam);
+    const hit = rayo.intersectObjects(tarjetas.map((g) => g.userData.foto), false).find((h) => h.object.parent.position.z > 0);
+    const t = hit && hit.object.parent;
+    if (t && t.userData.cargada) { visor.firstElementChild.src = t.userData.src; visor.classList.add("abierto"); }
+    else reimprimir();
+  }
+  a1.addEventListener("pointerdown", (e) => { arrastrando = true; xAnt = e.clientX; movido = 0; velAnillo = 0; try { a1.setPointerCapture(e.pointerId); } catch (_) {} });
+  a1.addEventListener("pointermove", (e) => {
+    if (!arrastrando) return;
+    const dx = e.clientX - xAnt; xAnt = e.clientX; movido += Math.abs(dx);
+    const d = dx / radioPx; giroAnillo += d; velAnillo = d;
+  });
+  a1.addEventListener("pointerup", (e) => { if (!arrastrando) return; arrastrando = false; if (movido < 8) tocarEscena(e); });
+  a1.addEventListener("pointercancel", () => { arrastrando = false; });
+
   // ---------- Cursor ----------
   let mx = 0, my = 0, sx = 0, sy = 0;
   addEventListener("pointermove", (e) => { mx = e.clientX / innerWidth - 0.5; my = e.clientY / innerHeight - 0.5; }, { passive: true });
 
   // Posición del llavero en pantalla (pixeles): va volando de un recuadro a otro
-  const pos = { x: 0, y: 0, t: 0, ok: false };
+  const pos = { x: 0, y: 0, t: 0, dy: 0, ok: false };
   let vuelta = 0, salto = 0, anclaAct = null;
   const reloj = new THREE.Clock();
 
@@ -823,13 +955,14 @@
       if (d < mejor) { mejor = d; dest = r; elegido = a; }
     });
     if (dest) {
-      const cx = dest.left + dest.width / 2, cy = dest.top + dest.height / 2, tam = Math.min(dest.width, dest.height);
+      const kk = parseFloat(elegido.dataset.k) || 1, dd = parseFloat(elegido.dataset.dy) || 0;
+      const cx = dest.left + dest.width / 2, cy = dest.top + dest.height / 2, tam = Math.min(dest.width, dest.height) * kk;
       if (elegido !== anclaAct) { if (anclaAct) vuelta += Math.PI * 2; anclaAct = elegido; }
-      if (!pos.ok || !listo || quieto) { pos.x = cx; pos.y = cy; pos.t = tam; pos.ok = true; }
-      else { pos.x += (cx - pos.x) * 0.1; pos.y += (cy - pos.y) * 0.22; pos.t += (tam - pos.t) * 0.1; }
+      if (!pos.ok || !listo || quieto) { pos.x = cx; pos.y = cy; pos.t = tam; pos.dy = dd; pos.ok = true; }
+      else { pos.x += (cx - pos.x) * 0.1; pos.y += (cy - pos.y) * 0.22; pos.t += (tam - pos.t) * 0.1; pos.dy += (dd - pos.dy) * 0.1; }
     }
     const s = pos.t * upp / 4.3;
-    llavero.position.set((pos.x - W / 2) * upp, -(pos.y - H / 2) * upp, 0);
+    llavero.position.set((pos.x - W / 2) * upp, -(pos.y - H / 2) * upp + pos.dy * s, 0);
     llavero.scale.setScalar(Math.max(0.0001, s * (1 + salto * 0.18)));
     salto *= 0.9;
     matBase.color.lerp(colorMeta, 0.12); matCara.color.lerp(caraMeta, 0.12);
@@ -837,7 +970,7 @@
     if (!listo) {
       avanceImp = Math.min(1, avanceImp + dt / DURACION);
       if (avanceImp >= 1) listo = true;
-      estado.innerHTML = listo ? "<b>¡Listo!</b> Tócalo para imprimir otro color" : "Imprimiendo tu llavero… <b>" + Math.round(avanceImp * 100) + "%</b>";
+      estado.innerHTML = listo ? "<b>¡Listo!</b> Arrastra para girar · toca el llavero" : "Imprimiendo tu llavero… <b>" + Math.round(avanceImp * 100) + "%</b>";
     }
     const yLocal = Y_MIN + (Y_MAX - Y_MIN) * avanceImp;
     plano.constant = llavero.position.y + yLocal * s + (listo ? 1000 : 0);
@@ -871,7 +1004,29 @@
       m.rotation.x = u.fase + (quieto ? 0 : t * u.vx) + scrollY * 0.002;
       m.rotation.y = u.fase + (quieto ? 0 : t * u.vy) + scrollY * 0.003;
       m.scale.setScalar(chico);
+      m.material.opacity = (m.material.wireframe ? 0.9 : 0.8) * (W < 700 ? 0.4 : 1);
     });
+
+    // Anillo de fotos reales alrededor del llavero de la portada
+    const r1 = a1.getBoundingClientRect();
+    anillo.visible = r1.width > 0 && r1.bottom > -80 && r1.top < H + 80;
+    if (anillo.visible) {
+      entrada = Math.min(1, entrada + dt / 1.4);
+      const e = quieto ? 1 : 1 - Math.pow(1 - entrada, 3);
+      const s1 = Math.min(r1.width, r1.height) * (parseFloat(a1.dataset.k) || 1) * upp / 4.3;
+      anillo.position.set((r1.left + r1.width / 2 - W / 2) * upp, -(r1.top + r1.height / 2 - H / 2) * upp, 0);
+      anillo.scale.setScalar(Math.max(0.0001, s1 * e));
+      radioPx = Math.max(60, RA * s1 / upp);
+      if (!arrastrando) { giroAnillo += velAnillo + (quieto ? 0 : dt * 0.3); velAnillo *= 0.94; }
+      const extra = (1 - e) * Math.PI * 2;
+      tarjetas.forEach((g) => {
+        const a = g.userData.a + giroAnillo + extra, z = RA * Math.cos(a), f = (z / RA + 1) / 2;
+        g.position.set(RA * Math.sin(a), YC - z * INCL, z); g.rotation.y = a;
+        const k = 0.38 + 0.62 * f, k2 = 0.3 + 0.7 * f;
+        g.userData.foto.material.color.setRGB(k, k, k);
+        g.userData.marco.material.color.setRGB(0.839 * k2, 0.643 * k2, 0.09 * k2);
+      });
+    }
 
     renderer.render(scene, cam);
   }
